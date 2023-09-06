@@ -5,9 +5,18 @@
 
 package main
 
-import "fmt"
+import (
+	"os"
+
+	_ "go.uber.org/automaxprocs/maxprocs"
+
+	"github.com/Daz-3ux/dBlog/internal/dazBlog"
+)
 
 // program entry function
 func main() {
-	fmt.Println("Hello dazBlog")
+	command := dazBlog.NewDazBlogCommand()
+	if err := command.Execute(); err != nil {
+		os.Exit(1)
+	}
 }

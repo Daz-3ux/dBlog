@@ -43,7 +43,6 @@ paths:
           description: request failed due to client-side problem
           content:
             application/json:
-            application/json:
               schema:
                 $ref: '#/components/schemas/ErrResponse'
         '500':

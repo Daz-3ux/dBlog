@@ -1,0 +1,20 @@
+# Copyright 2023 daz-3ux(杨鹏达) <daz-3ux@proton.me>. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file. The original repo for
+# this file is https://github.com/Daz-3ux/dBlog.
+db:
+  host: 127.0.0.1
+  username: dazblog
+  password: dazblog
+  database: dazblog
+  max-idle-connections: 100
+  max-open-connections: 100
+  max-connection-life-time: 10s
+  log-level: 4 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
+
+log:
+  disable-caller: false
+  disable-stacktrace: false
+  level: debug
+  format: console
+  output-paths: [stdout, /tmp/dBlog.log]

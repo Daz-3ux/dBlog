@@ -1,0 +1,27 @@
+- 使用定制化日志包, 方便扩展以及统一日志格式
+  - 创建 zap.Logger 的自定义 Logger 对象
+  - 编写创建函数,创建 zapLogger 对象
+  - 创建 *zap.Logger 对象
+  - 实现日志接口
+
+- 日志包为 `github.com/daz-3ux/dBlog/internal/pkg/log`
+  - 日志包使用 [zap](https://github.com/uber-go/zap) 库,在 zap 库基础上进行了一层封装
+  - 拥有 2 类 `zapLogger` 对象
+    - 全局对象
+      - 使用类似 `log.Infow()` 的方式进行调用
+      - Init(opts *Options) 初始化全局对象
+    - 局部对象
+	  - 可以传入不同参数,创建一个自定义的 `*zapLogger` 对象
+      - NewLogger(opts *Options) *zapLogger 创建一个自定义的 `*zapLogger`
+  - 通过 Options 结构体对日志系统进行配置
+    - 可以通过 NewOptions() 创建一个默认的 *Options 对象
+    - 自定义配置文件存放于 yaml 之中,通过 `viper` 读取日志配置
+
+- zap
+  - zap 是一个高性能的日志库,在性能上远超标准库 log 包
+  - zap 有两种日志记录模式:
+	- SugaredLogger
+	  - 支持`结构化`以及`printf`风格的日志记录
+	- Logger
+	  - 只支持`强类型`的结构化日志记录
+	  - 性能甚至高于`SugaredLogger`

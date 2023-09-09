@@ -15,36 +15,52 @@ import (
 )
 
 const (
-	recommendedHomeDir = ".dazblog "
-	defaultConfigName  = "dazBlog.yaml"
+	// recommendedHomeDir defines the default directory for storing dBlog service configurations
+	recommendedHomeDir = ".dblog "
+	// defaultConfigName specifies the default configuration file name for dBlog service
+	defaultConfigName = "dazBlog.yaml"
 )
 
+// initConfig set the config file name to be read, env variable, and read config file content into viper
 func initConfig() {
 	if cfgFile != "" {
+		// read config file from the specified file
 		viper.SetConfigFile(cfgFile)
 	} else {
+		// search user's homedir
 		home, err := os.UserHomeDir()
+		// if failed, print 'Error: xxx' and do exit(1)
 		cobra.CheckErr(err)
 
+		// add `$HOME/<recommendedHomeDir>` into search path
 		viper.AddConfigPath(filepath.Join(home, recommendedHomeDir))
+		// add current dir into search path
 		viper.AddConfigPath(".")
+		// set the config file's type
 		viper.SetConfigType("yaml")
+		// set the config file's name
 		viper.SetConfigName(defaultConfigName)
 	}
 
+	// read matching env variable
 	viper.AutomaticEnv()
+	// set env variable's prefix
 	viper.SetEnvPrefix("MINIBLOG")
 
-	replacer := strings.NewReplacer(".", "-")
+	// Replace '.' and '-' with '_' in the key string before calling viper.Get(key).
+	replacer := strings.NewReplacer(".", "_", "-", "_")
 	viper.SetEnvKeyReplacer(replacer)
 
+	// read config file
 	if err := viper.ReadInConfig(); err != nil {
 		log.Errorw("Failed to read config file", "err", err)
 	}
 
+	// print the currently used config file
 	log.Infow("Using config file", "file", viper.ConfigFileUsed())
 }
 
+// logOptions reads log config from viper
 func logOptions() *log.Options {
 	return &log.Options{
 		DisableCaller:     viper.GetBool("log.disable-caller"),

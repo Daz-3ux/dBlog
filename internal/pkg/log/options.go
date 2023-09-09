@@ -11,13 +11,19 @@ import (
 
 // Options the options for the logger
 type Options struct {
-	DisableCaller     bool
+	// if enabled, the log will display the file and line num of the calling log
+	DisableCaller bool
+	// if enabled, will print stack info for panic and higher log level
 	DisableStacktrace bool
-	Level             string
-	Format            string
-	OutputPaths       []string
+	// log level: debug, info , warn, error, dpanic, panic, fatal
+	Level string
+	// log format: console, json
+	Format string
+	// specify log output path
+	OutputPaths []string
 }
 
+// NewOptions creates an Options object with default parameters
 func NewOptions() *Options {
 	return &Options{
 		DisableCaller:     false,

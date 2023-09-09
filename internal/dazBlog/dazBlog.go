@@ -15,6 +15,8 @@ import (
 
 var cfgFile string
 
+// NewDazBlogCommand create the *cobra.Command object
+// so can use the Execute method to start
 func NewDazBlogCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		// specify the name of the command
@@ -33,9 +35,10 @@ Find more dBlog information at:
 		RunE: func(cmd *cobra.Command, args []string) error {
 			log.Init(logOptions())
 			defer log.Sync()
+
 			return run()
 		},
-		//
+		// no need to specify command line parameters
 		Args: func(cmd *cobra.Command, args []string) error {
 			for _, arg := range args {
 				if len(arg) > 0 {
@@ -47,9 +50,18 @@ Find more dBlog information at:
 		},
 	}
 
+	// The following settings make the initConfig function be called
+	// every time when the command is executed to read the configuration.
 	cobra.OnInitialize(initConfig)
 
-	cmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "The path to the miniblog configuration file. Empty string for no configuration file.")
+	// define custom flag and config
+
+	// cobra support persistent flag
+	// for providing options that work across all sub-commands of a command
+	cmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "The path to the dBlog configuration file. Empty string for no configuration file.")
+
+	// cobra supports local flag
+	// which can only be used within the command to which they are bound
 	cmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	return cmd
 }

@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file. The original repo for
 // this file is https://github.com/Daz-3ux/dBlog.
 
+// Package log is a log package used by dazBlog project
 package log
 
 import (
@@ -30,6 +31,7 @@ type zapLogger struct {
 	z *zap.Logger
 }
 
+// ensure that zapLogger implements the Logger interface
 var _ Logger = (*zapLogger)(nil)
 
 var (
@@ -53,21 +55,33 @@ func NewLogger(opts *Options) *zapLogger {
 		opts = NewOptions()
 	}
 
+	// convert text-based log level, e.g. "info", to the zapcore.Level type
 	var zapLevel zapcore.Level
 	if err := zapLevel.UnmarshalText([]byte(opts.Level)); err != nil {
+		// if specify an invalid log level, use info level as default
 		zapLevel = zapcore.InfoLevel
 	}
 
+	// create a default zapcore.EncoderConfig
 	encoderConfig := zap.NewProductionEncoderConfig()
+
+	// customize the default zapcore.EncoderConfig
+	// customize MessageKey to "message" for a more explicit meaning
 	encoderConfig.MessageKey = "message"
+	// customize TimeKey to "timestamp" for a more explicit meaning
 	encoderConfig.TimeKey = "timestamp"
+	// customize Level style to Capital and Color
+	encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	// customize Time format for improved readability
 	encoderConfig.EncodeTime = func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 		enc.AppendString(t.Format("2006-01-02 15:04:05.000"))
 	}
+	// customize Duration format for improved precision
 	encoderConfig.EncodeDuration = func(d time.Duration, enc zapcore.PrimitiveArrayEncoder) {
 		enc.AppendFloat64(float64(d) / float64(time.Millisecond))
 	}
 
+	// cfg the config required to build a zap.Logger
 	cfg := &zap.Config{
 		DisableCaller:     opts.DisableCaller,
 		DisableStacktrace: opts.DisableStacktrace,
@@ -75,9 +89,11 @@ func NewLogger(opts *Options) *zapLogger {
 		Encoding:          opts.Format,
 		EncoderConfig:     encoderConfig,
 		OutputPaths:       opts.OutputPaths,
-		ErrorOutputPaths:  []string{"stderr"},
+		// specify the default inner error output path
+		ErrorOutputPaths: []string{"stderr"},
 	}
 
+	// use cfg to build a *zap.Logger
 	z, err := cfg.Build(zap.AddStacktrace(zap.PanicLevel), zap.AddCallerSkip(1))
 	if err != nil {
 		panic(err)
@@ -86,11 +102,14 @@ func NewLogger(opts *Options) *zapLogger {
 	// OOP: wrap the zap library in a custom struct
 	logger := &zapLogger{z: z}
 
+	// redirect the standard library's log to the zap logger
 	zap.RedirectStdLog(z)
 
 	return logger
 }
 
+// Sync flushes all buffered logs into disk
+// main function should call this function before exit
 func Sync() {
 	std.Sync()
 }
@@ -99,6 +118,7 @@ func (l *zapLogger) Sync() {
 	_ = l.z.Sync()
 }
 
+// Debugw print debug level log
 func Debugw(msg string, keysAndValues ...interface{}) {
 	std.z.Sugar().Debugw(msg, keysAndValues...)
 }
@@ -107,6 +127,7 @@ func (l *zapLogger) Debugw(msg string, keysAndValues ...interface{}) {
 	l.z.Sugar().Debugw(msg, keysAndValues...)
 }
 
+// Infow print info level log
 func Infow(msg string, keysAndValues ...interface{}) {
 	std.z.Sugar().Infow(msg, keysAndValues...)
 }
@@ -115,6 +136,7 @@ func (l *zapLogger) Infow(msg string, keysAndValues ...interface{}) {
 	l.z.Sugar().Infow(msg, keysAndValues...)
 }
 
+// Warnw print warn level log
 func Warnw(msg string, keysAndValues ...interface{}) {
 	std.z.Sugar().Warnw(msg, keysAndValues...)
 }
@@ -123,6 +145,7 @@ func (l *zapLogger) Warnw(msg string, keysAndValues ...interface{}) {
 	l.z.Sugar().Warnw(msg, keysAndValues...)
 }
 
+// Errorw print error level log
 func Errorw(msg string, keysAndValues ...interface{}) {
 	std.z.Sugar().Errorw(msg, keysAndValues...)
 }
@@ -131,6 +154,7 @@ func (l *zapLogger) Errorw(msg string, keysAndValues ...interface{}) {
 	l.z.Sugar().Errorw(msg, keysAndValues...)
 }
 
+// Panicw print panic level log
 func Panicw(msg string, keysAndValues ...interface{}) {
 	std.z.Sugar().Panicw(msg, keysAndValues...)
 }
@@ -139,6 +163,7 @@ func (l *zapLogger) Panicw(msg string, keysAndValues ...interface{}) {
 	l.z.Sugar().Panicw(msg, keysAndValues...)
 }
 
+// Fatalw print fatal level log
 func Fatalw(msg string, keysAndValues ...interface{}) {
 	std.z.Sugar().Fatalw(msg, keysAndValues...)
 }

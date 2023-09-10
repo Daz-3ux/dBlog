@@ -13,7 +13,7 @@ OUTPUT_DIR := $(ROOT_DIR)/_output
 
 # specify the version package used by the application
 # values will be injected into the package using '-ldflags -X'
-VERSION_PACKAGE=github.com/daz-3ux/dBlog/pkg/version
+VERSION_PACKAGE=github.com/Daz-3ux/dBlog/pkg/version
 
 ## define readable version number
 ifeq ($(origin VERSION), undefined)
@@ -43,7 +43,7 @@ all: add-copyright format build
 
 .PHONY: build
 build: tidy # compile source code, auto adding/removing dependency packages depending on "tidy" target
-	go build -v -ldflags "$(GO_LDFLAGS)" -o $(OUTPUT_DIR)/dBlog $(ROOT_DIR)/cmd/dBlog/main.go
+	go build -gcflags "all=-N -l" -v -ldflags "$(GO_LDFLAGS)" -o $(OUTPUT_DIR)/dBlog $(ROOT_DIR)/cmd/dBlog/main.go
 
 .PHONY: format
 format: # format source code

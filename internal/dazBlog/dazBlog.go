@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
+	"github.com/Daz-3ux/dBlog/pkg/version/verflag"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -33,6 +34,8 @@ Find more dBlog information at:
 		// specify the run function to execute when cmd.Execute() is called
 		// if the function fails, an error message will be returned
 		RunE: func(cmd *cobra.Command, args []string) error {
+			verflag.PrintAndExitIfRequested()
+
 			log.Init(logOptions())
 			defer log.Sync()
 
@@ -63,6 +66,10 @@ Find more dBlog information at:
 	// cobra supports local flag
 	// which can only be used within the command to which they are bound
 	cmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	// add --version flag
+	verflag.AddFlags(cmd.PersistentFlags())
+
 	return cmd
 }
 

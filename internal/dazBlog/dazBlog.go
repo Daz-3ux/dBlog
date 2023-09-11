@@ -19,6 +19,7 @@ var cfgFile string
 // NewDazBlogCommand create the *cobra.Command object
 // so can use the Execute method to start
 func NewDazBlogCommand() *cobra.Command {
+	// cmd is the *cobra.Command object and the top-level command
 	cmd := &cobra.Command{
 		// specify the name of the command
 		Use: "dBlog",

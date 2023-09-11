@@ -13,11 +13,15 @@ import (
 	"strconv"
 )
 
+// used to represent the version flag value
 type versionValue int
 
 const (
+	// VersionFalse not specified
 	VersionFalse versionValue = iota
+	// VersionTrue specified as true
 	VersionTrue
+	// VersionRaw specified as true and use raw format
 	VersionRaw
 )
 
@@ -28,14 +32,19 @@ const (
 
 var versionFlag = Version(versionFlagName, VersionFalse, "Print version info and quit")
 
+// implement the pflag.Value interface
+
+// IsBoolFlag returns true if the value can explain as boolean flag
 func (v *versionValue) IsBoolFlag() bool {
 	return true
 }
 
+// Get returns the value of the flag
 func (v *versionValue) Get() interface{} {
 	return v
 }
 
+// String returns the string format of the flag
 func (v *versionValue) String() string {
 	if *v == VersionRaw {
 		return strRawVersion
@@ -44,6 +53,7 @@ func (v *versionValue) String() string {
 	return fmt.Sprintf("%v", *v == VersionTrue)
 }
 
+// Set sets the value of the flag
 func (v *versionValue) Set(s string) error {
 	if s == strRawVersion {
 		*v = VersionRaw
@@ -60,6 +70,7 @@ func (v *versionValue) Set(s string) error {
 	return err
 }
 
+// Type returns the type of the flag
 func (v *versionValue) Type() string {
 	return "version"
 }

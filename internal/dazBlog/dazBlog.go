@@ -6,12 +6,14 @@
 package dazBlog
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	"github.com/Daz-3ux/dBlog/pkg/version/verflag"
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"net/http"
 )
 
 var cfgFile string
@@ -75,9 +77,33 @@ Find more dBlog information at:
 }
 
 func run() error {
-	fmt.Println("Hello, dBlog!")
-	settings, _ := json.Marshal(viper.AllSettings())
-	log.Infow(string(settings))
-	log.Infow(viper.GetString("db.username"))
+	// set Gin mode
+	gin.SetMode(viper.GetString("runmode"))
+
+	// create Gin engine
+	g := gin.New()
+
+	// register 404 handler
+	g.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"code": 10003, "message": "404 Not Found"})
+	})
+
+	// register /healthz handler
+	g.GET("/healthz", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "OK"})
+	})
+
+	// create HTTP server
+	httpsrv := &http.Server{
+		Addr:    viper.GetString("addr"),
+		Handler: g,
+	}
+
+	// start HTTP server
+	log.Infow("Start HTTP listening", "address", httpsrv.Addr)
+	if err := httpsrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		log.Fatalw("Failed to listen and serve", "error", err.Error())
+	}
+
 	return nil
 }

@@ -7,3 +7,6 @@
 
 ## 日志系统
 [基于 zap 构建可自定义的日志系统](./internal/pkg/log/README.md)
+
+## 版本信息
+[打印详细版本信息](./pkg/version/README.md)

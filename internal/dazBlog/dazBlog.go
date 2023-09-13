@@ -84,7 +84,7 @@ func run() error {
 	g := gin.New()
 
 	// register 404 handler
-	g.LoadHTMLGlob("configs/*.html")
+	g.LoadHTMLGlob("internal/resource/*.html")
 	g.NoRoute(func(c *gin.Context) {
 		//c.JSON(http.StatusOK, gin.H{"code": 10003, "message": "404 Not Found"})
 		c.HTML(http.StatusNotFound, "404.html", gin.H{})

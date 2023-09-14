@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
+	mw "github.com/Daz-3ux/dBlog/internal/pkg/middleware"
 	"github.com/Daz-3ux/dBlog/pkg/version/verflag"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
@@ -83,6 +84,11 @@ func run() error {
 	// create Gin engine
 	g := gin.New()
 
+	// gin.Recovery() middleware is used to capture any panics and recover from them
+	mws := []gin.HandlerFunc{gin.Recovery(), mw.NoCache, mw.Cors, mw.Secure, mw.RequestID()}
+
+	g.Use(mws...)
+
 	// register 404 handler
 	g.LoadHTMLGlob("internal/resource/*.html")
 	g.NoRoute(func(c *gin.Context) {
@@ -92,6 +98,7 @@ func run() error {
 
 	// register /healthz handler
 	g.GET("/healthz", func(c *gin.Context) {
+		log.C(c).Infow("Healthz function called")
 		c.JSON(http.StatusOK, gin.H{"status": "OK"})
 	})
 

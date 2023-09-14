@@ -7,6 +7,8 @@
 package log
 
 import (
+	"context"
+	"github.com/Daz-3ux/dBlog/internal/pkg/known"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
@@ -170,4 +172,28 @@ func Fatalw(msg string, keysAndValues ...interface{}) {
 
 func (l *zapLogger) Fatalw(msg string, keysAndValues ...interface{}) {
 	l.z.Sugar().Fatalw(msg, keysAndValues...)
+}
+
+// C extracts relevant key-value pairs from the incoming context
+// and adds them to the structured logs of the zap.Logger.
+func C(ctx context.Context) *zapLogger {
+	return std.C(ctx)
+}
+
+func (l *zapLogger) C(ctx context.Context) *zapLogger {
+	lc := l.clone()
+
+	if requestID := ctx.Value(known.XRequestIDKey); requestID != nil {
+		lc.z = lc.z.With(zap.Any(known.XRequestIDKey, requestID))
+	}
+
+	return lc
+}
+
+// clone deep copy the zapLogger
+// because the log package is called concurrently by multiple request,
+// X-Request-ID is protected against contamination
+func (l *zapLogger) clone() *zapLogger {
+	lc := *l
+	return &lc
 }

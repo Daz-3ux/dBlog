@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// RequestID is a Gin middleware used to inject the `X-Request-ID` key-value pair into the context and response of each HTTP request
 func RequestID() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Get the request id from the Gin context

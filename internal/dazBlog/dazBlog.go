@@ -6,6 +6,7 @@
 package dazBlog
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
@@ -15,6 +16,10 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 var cfgFile string
@@ -33,7 +38,7 @@ func NewDazBlogCommand() *cobra.Command {
 Find more dBlog information at:
 	https://github.com/daz-3ux/dBlog#readme`,
 
-		// when error occurs, the command will not print usage information
+		// when an error occurs, the command will not print usage information
 		SilenceUsage: true,
 		// specify the run function to execute when cmd.Execute() is called
 		// if the function fails, an error message will be returned
@@ -63,8 +68,8 @@ Find more dBlog information at:
 
 	// define custom flag and config
 
-	// cobra support persistent flag
-	// for providing options that work across all sub-commands of a command
+	// cobra supports a persistent flag
+	// for providing options that work across all subs-commands of a command
 	cmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "The path to the dBlog configuration file. Empty string for no configuration file.")
 
 	// cobra supports local flag
@@ -110,9 +115,34 @@ func run() error {
 
 	// start HTTP server
 	log.Infow("Start HTTP listening", "address", httpsrv.Addr)
-	if err := httpsrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-		log.Fatalw("Failed to listen and serve", "error", err.Error())
+	// anonymous goroutine, listen and serve on HTTPS
+	go func() {
+		if err := httpsrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalw(err.Error())
+		}
+	}()
+
+	// wait for an interrupt signal to gracefully shut down the server with a 10s timeout
+	quit := make(chan os.Signal, 1)
+	// kill (no param) default sends syscall.SIGTERM
+	// kill -2 is syscall.SIGINT(CTRL + C)
+	// kill -9 is syscall.SIGKILL but can't be caught, so don't need to add it
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit // block until receive the signal
+	log.Infow("Shutting down server......")
+
+	// create a context with a timeout of 10 seconds
+	// used to signal server goroutines that they have 10s to complete the current request
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// gracefully shut down the server: handle any unprocessed requests
+	if err := httpsrv.Shutdown(ctx); err != nil {
+		log.Fatalw("Insecure Server forced to shutdown:", "err", err)
+		return err
 	}
+
+	log.Infow("Server exiting")
 
 	return nil
 }

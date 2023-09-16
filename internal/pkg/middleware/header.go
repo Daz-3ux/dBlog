@@ -43,6 +43,7 @@ func Secure(c *gin.Context) {
 	c.Header("X-Content-Type-Options", "nosniff")
 	c.Header("X-XSS-Protection", "1; mode=block")
 	if c.Request.TLS != nil {
+		// all year ues HTTPS
 		c.Header("Strict-Transport-Security", "max-age=31536000")
 	}
 }

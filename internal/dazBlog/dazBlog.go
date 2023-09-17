@@ -9,6 +9,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/Daz-3ux/dBlog/internal/pkg/core"
+	"github.com/Daz-3ux/dBlog/internal/pkg/errno"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	mw "github.com/Daz-3ux/dBlog/internal/pkg/middleware"
 	"github.com/Daz-3ux/dBlog/pkg/version/verflag"
@@ -97,14 +99,14 @@ func run() error {
 	// register 404 handler
 	g.LoadHTMLGlob("internal/resource/*.html")
 	g.NoRoute(func(c *gin.Context) {
-		//c.JSON(http.StatusOK, gin.H{"code": 10003, "message": "404 Not Found"})
-		c.HTML(http.StatusNotFound, "404.html", gin.H{})
+		log.C(c).Errorw("Page not found", "url:", c.Request.URL)
+		core.WriteResponse(c, errno.ErrPageNotFound, nil)
 	})
 
 	// register /healthz handler
 	g.GET("/healthz", func(c *gin.Context) {
 		log.C(c).Infow("Healthz function called")
-		c.JSON(http.StatusOK, gin.H{"status": "OK"})
+		core.WriteResponse(c, nil, map[string]string{"status": "ok"})
 	})
 
 	// create HTTP server

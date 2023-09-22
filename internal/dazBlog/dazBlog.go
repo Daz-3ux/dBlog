@@ -85,6 +85,11 @@ Find more dBlog information at:
 }
 
 func run() error {
+	// init the store layer
+	if err := initStore(); err != nil {
+		return err
+	}
+
 	// set Gin mode
 	gin.SetMode(viper.GetString("runmode"))
 

@@ -10,9 +10,9 @@ addr: :8081        # HTTP server listen port
 # mysql configs
 db:
   host: 127.0.0.1
-  username: dazblog
-  password: dazblog
-  database: dazblog
+  username: root
+  password: passwd
+  database: dazBlog
   max-idle-connections: 100
   max-open-connections: 100
   max-connection-life-time: 10s

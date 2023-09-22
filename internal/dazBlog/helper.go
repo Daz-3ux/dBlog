@@ -6,7 +6,9 @@
 package dazBlog
 
 import (
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
+	"github.com/Daz-3ux/dBlog/pkg/db"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
@@ -69,4 +71,28 @@ func logOptions() *log.Options {
 		Format:            viper.GetString("log.format"),
 		OutputPaths:       viper.GetStringSlice("log.output-paths"),
 	}
+}
+
+// initStore read the DB config from viper and init the store layer
+func initStore() error {
+	// init the store layer
+	dbOptions := &db.MySQLOptions{
+		Host:                  viper.GetString("db.host"),
+		Username:              viper.GetString("db.username"),
+		Password:              viper.GetString("db.password"),
+		Database:              viper.GetString("db.database"),
+		MaxIdleConnections:    viper.GetInt("db.max-idle-connections"),
+		MaxOpenConnections:    viper.GetInt("db.max-open-connections"),
+		MaxConnectionLifeTime: viper.GetDuration("db.max-connection-life-time"),
+		LogLevel:              viper.GetInt("db.log-level"),
+	}
+
+	ins, err := db.NewMySql(dbOptions)
+	if err != nil {
+		return err
+	}
+
+	_ = store.NewStore(ins)
+
+	return nil
 }

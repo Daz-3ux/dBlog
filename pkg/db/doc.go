@@ -3,5 +3,5 @@
 // license that can be found in the LICENSE file. The original repo for
 // this file is https://github.com/Daz-3ux/dBlog.
 
-// Package store defines the store layer of dazBlog
-package store // import "github.com/Daz-3ux/dBlog/internal/dazBlog/store"
+// Package db provides useful functions to create mysql instance
+package db // import "github.com/Daz-3ux/dBlog/pkg/db"

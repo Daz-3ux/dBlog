@@ -42,7 +42,7 @@ var _ IStore = (*datastore)(nil)
 func NewStore(db *gorm.DB) *datastore {
 	// ensure that the instance is created only once
 	once.Do(func() {
-		S = &datastore{db}
+		S = &datastore{db: db}
 	})
 
 	return S

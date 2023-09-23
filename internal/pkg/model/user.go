@@ -5,7 +5,11 @@
 
 package model
 
-import "time"
+import (
+	"github.com/Daz-3ux/dBlog/pkg/auth"
+	"gorm.io/gorm"
+	"time"
+)
 
 type UserM struct {
 	ID        int64     `gorm:"column:id;primary_key"` // unique id for the user, server as the primary key
@@ -21,4 +25,13 @@ type UserM struct {
 // TableName sets the insert table name for this struct type
 func (u *UserM) TableName() string {
 	return "users"
+}
+
+func (u *UserM) BeforeCreate(tx *gorm.DB) (err error) {
+	// Encrypt the user password
+	u.Password, err = auth.Encrypt(u.Password)
+	if err != nil {
+		return err
+	}
+	return nil
 }

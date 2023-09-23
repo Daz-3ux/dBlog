@@ -1,9 +1,17 @@
 # dazBlog
 
-## 采用模型
+## 业务架构模型
 - 模型层 -- 控制层 -- 业务层 -- 仓库层
 - model -- controller -- biz -- store
 - 存储对象结构与其方法 -- 业务路由 -- 业务逻辑处理 -- 与数据库/第三方服务进行 CRUD
+![架构图](./internal/resource/arch)
+- 开发顺序:
+  - Model -> Store -> Biz -> Controller
+  - 从下到上，优先开发依赖少的组件
+  - [Model](./internal/pkg/model/README.md)
+  - [Store](./internal/dazBlog/store/README.md)
+  - [Biz](./internal/dazBlog/biz/README.md)
+  - [Controller](./internal/dazBlog/controller/README.md)
 
 ## 日志系统
 [基于 zap 构建可自定义的日志系统](./internal/pkg/log/README.md)

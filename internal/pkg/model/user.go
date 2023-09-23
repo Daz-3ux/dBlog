@@ -27,6 +27,7 @@ func (u *UserM) TableName() string {
 	return "users"
 }
 
+// BeforeCreate will encrypt the user password before creating the user
 func (u *UserM) BeforeCreate(tx *gorm.DB) (err error) {
 	// Encrypt the user password
 	u.Password, err = auth.Encrypt(u.Password)

@@ -30,6 +30,10 @@ type IStore interface {
 
 // datastore is the `factory` for creating store layer instance
 // datastore is connected gorm in the under and implements the IStore methods in the upper
+/*
+* use datastore instead of Database:
+* hide inner struct, expose only the interface
+ */
 type datastore struct {
 	// The core of the store layer revolves around the *gorm.DB object
 	db *gorm.DB

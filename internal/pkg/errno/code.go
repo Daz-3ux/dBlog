@@ -13,4 +13,8 @@ var (
 	InternalServerError = &Errno{HTTP: 500, Code: "InternalError", Message: "Internal Server Error"}
 
 	ErrPageNotFound = &Errno{HTTP: 404, Code: "ResourceNotFound.PageNotFound", Message: "Page Not Found"}
+
+	ErrBind = &Errno{HTTP: 400, Code: "InvalidParameter.BindError", Message: "Error occurred while binding the request body to the struct."}
+
+	ErrInvalidParameter = &Errno{HTTP: 400, Code: "InvalidParameter", Message: "Parameter verification failed."}
 )

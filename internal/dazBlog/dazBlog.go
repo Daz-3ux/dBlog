@@ -9,8 +9,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/Daz-3ux/dBlog/internal/pkg/core"
-	"github.com/Daz-3ux/dBlog/internal/pkg/errno"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	mw "github.com/Daz-3ux/dBlog/internal/pkg/middleware"
 	"github.com/Daz-3ux/dBlog/pkg/version/verflag"
@@ -101,18 +99,9 @@ func run() error {
 
 	g.Use(mws...)
 
-	// register 404 handler
-	g.LoadHTMLGlob("internal/resource/*.html")
-	g.NoRoute(func(c *gin.Context) {
-		log.C(c).Errorw("Page not found", "url:", c.Request.URL)
-		core.WriteResponse(c, errno.ErrPageNotFound, nil)
-	})
-
-	// register /healthz handler
-	g.GET("/healthz", func(c *gin.Context) {
-		log.C(c).Infow("Healthz function called")
-		core.WriteResponse(c, nil, map[string]string{"status": "ok"})
-	})
+	if err := installRouters(g); err != nil {
+		return err
+	}
 
 	// create HTTP server
 	httpsrv := &http.Server{

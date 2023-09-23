@@ -4,3 +4,16 @@
 // this file is https://github.com/Daz-3ux/dBlog.
 
 package user
+
+import (
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz"
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
+)
+
+type UserController struct {
+	b biz.IBiz
+}
+
+func NewUserController(ds store.IStore) *UserController {
+	return &UserController{b: biz.NewBiz(ds)}
+}

@@ -3,6 +3,7 @@ module github.com/Daz-3ux/dBlog
 go 1.21.0
 
 require (
+	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/uuid v1.1.2
 	github.com/gosuri/uitable v0.0.4

@@ -6,6 +6,7 @@
 package dazBlog
 
 import (
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/controller/v1/post"
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/controller/v1/user"
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
 	"github.com/Daz-3ux/dBlog/internal/pkg/core"
@@ -16,7 +17,7 @@ import (
 
 func installRouters(g *gin.Engine) error {
 	// register 404 handler
-	g.LoadHTMLGlob("internal/resource/*.html")
+	g.LoadHTMLGlob("internal/resource/404.html")
 	g.NoRoute(func(c *gin.Context) {
 		log.C(c).Errorw("Page not found", "url:", c.Request.URL)
 		core.WriteResponse(c, errno.ErrPageNotFound, nil)
@@ -29,6 +30,7 @@ func installRouters(g *gin.Engine) error {
 	})
 
 	uc := user.NewUserController(store.S)
+	pc := post.NewPostController(store.S)
 
 	// create v1 route group
 	v1 := g.Group("/v1")
@@ -37,6 +39,10 @@ func installRouters(g *gin.Engine) error {
 		userv1 := v1.Group("/users")
 		{
 			userv1.POST("", uc.Create)
+		}
+		postv1 := v1.Group("/posts")
+		{
+			postv1.POST("", pc.Create)
 		}
 	}
 

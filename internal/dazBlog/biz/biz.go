@@ -6,6 +6,7 @@
 package biz
 
 import (
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz/post"
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz/user"
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
 )
@@ -13,6 +14,7 @@ import (
 // IBiz defines the method need to be implemented by the Biz layer
 type IBiz interface {
 	Users() user.UserBiz
+	Posts() post.PostBiz
 }
 
 // ensure that biz implements the IBiz interface
@@ -32,4 +34,8 @@ func NewBiz(ds store.IStore) IBiz {
 // Users return an instance of UserBiz
 func (b *biz) Users() user.UserBiz {
 	return user.NewUserBiz(b.ds)
+}
+
+func (b *biz) Posts() post.PostBiz {
+	return post.NewPostBiz(b.ds)
 }

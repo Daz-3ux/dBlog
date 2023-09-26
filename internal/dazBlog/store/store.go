@@ -26,6 +26,7 @@ var (
 // such as IStore defines Users, Users defines the specific methods
 type IStore interface {
 	Users() UserStore
+	Posts() PostStore
 }
 
 // datastore is the `factory` for creating store layer instance
@@ -55,4 +56,8 @@ func NewStore(db *gorm.DB) *datastore {
 // Users return an instance of UserStore
 func (ds *datastore) Users() UserStore {
 	return newUsers(ds.db)
+}
+
+func (ds *datastore) Posts() PostStore {
+	return newPosts(ds.db)
 }

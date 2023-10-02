@@ -6,6 +6,7 @@
 # common configs
 runmode: debug    # Gin run mode, debug / release / test
 addr: :8081        # HTTP server listen port
+jwt-secret: szO8T9zWx+AyZB1le9MaEG7MCToMVcELHZYiakv1rRE
 
 # mysql configs
 db:

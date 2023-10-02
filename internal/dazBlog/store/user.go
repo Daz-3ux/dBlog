@@ -14,6 +14,8 @@ import (
 // UserStore defines the methods that need to be implemented by the user model in the store layer
 type UserStore interface {
 	Create(ctx context.Context, user *model.UserM) error
+	Get(ctx context.Context, username string) (*model.UserM, error)
+	Update(ctx context.Context, user *model.UserM) error
 }
 
 // users is the implementation of UserStore interface
@@ -31,4 +33,18 @@ func newUsers(db *gorm.DB) *users {
 // Create insects a new user record into the database
 func (u *users) Create(ctx context.Context, user *model.UserM) error {
 	return u.db.Create(&user).Error
+}
+
+// Get returns the user record with the specified username
+func (u *users) Get(ctx context.Context, username string) (*model.UserM, error) {
+	var user model.UserM
+	if err := u.db.Where("username = ?", username).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+// Update updates the user record in the database
+func (u *users) Update(ctx context.Context, user *model.UserM) error {
+	return u.db.Save(&user).Error
 }

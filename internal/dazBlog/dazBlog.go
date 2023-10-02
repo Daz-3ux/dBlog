@@ -9,8 +9,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/Daz-3ux/dBlog/internal/pkg/known"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	mw "github.com/Daz-3ux/dBlog/internal/pkg/middleware"
+	"github.com/Daz-3ux/dBlog/pkg/token"
 	"github.com/Daz-3ux/dBlog/pkg/version/verflag"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
@@ -87,6 +89,8 @@ func run() error {
 	if err := initStore(); err != nil {
 		return err
 	}
+
+	token.Init(viper.GetString("jwt-secret"), known.XUsernameKey)
 
 	// set Gin mode
 	gin.SetMode(viper.GetString("runmode"))

@@ -12,6 +12,7 @@ import (
 	"github.com/Daz-3ux/dBlog/internal/pkg/core"
 	"github.com/Daz-3ux/dBlog/internal/pkg/errno"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
+	mw "github.com/Daz-3ux/dBlog/internal/pkg/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -32,6 +33,7 @@ func installRouters(g *gin.Engine) error {
 	uc := user.NewUserController(store.S)
 	pc := post.NewPostController(store.S)
 
+	g.POST("/login", uc.Login)
 	// create v1 route group
 	v1 := g.Group("/v1")
 	{
@@ -39,6 +41,8 @@ func installRouters(g *gin.Engine) error {
 		userv1 := v1.Group("/users")
 		{
 			userv1.POST("", uc.Create)
+			userv1.PUT(":name/change-password", uc.ChangePassword)
+			userv1.Use(mw.Authn())
 		}
 		postv1 := v1.Group("/posts")
 		{

@@ -78,12 +78,12 @@ func NewLogger(opts *Options) *zapLogger {
 	encoderConfig.EncodeTime = func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 		enc.AppendString(t.Format("2006-01-02 15:04:05.000"))
 	}
-	// customize Duration format for improved precision
+	// customize a Duration format for improved precision
 	encoderConfig.EncodeDuration = func(d time.Duration, enc zapcore.PrimitiveArrayEncoder) {
 		enc.AppendFloat64(float64(d) / float64(time.Millisecond))
 	}
 
-	// cfg the config required to build a zap.Logger
+	// cfg the config required building a zap.Logger
 	cfg := &zap.Config{
 		DisableCaller:     opts.DisableCaller,
 		DisableStacktrace: opts.DisableStacktrace,
@@ -110,7 +110,7 @@ func NewLogger(opts *Options) *zapLogger {
 	return logger
 }
 
-// Sync flushes all buffered logs into disk
+// Sync flushes all buffered logs into the disk
 // main function should call this function before exit
 func Sync() {
 	std.Sync()
@@ -187,10 +187,15 @@ func (l *zapLogger) C(ctx context.Context) *zapLogger {
 		lc.z = lc.z.With(zap.Any(known.XRequestIDKey, requestID))
 	}
 
+	// Add the username to the output fields of the log
+	if userID := ctx.Value(known.XUsernameKey); userID != nil {
+		lc.z = lc.z.With(zap.Any(known.XUsernameKey, userID))
+	}
+
 	return lc
 }
 
-// clone deep copy the zapLogger
+// clone deep copies the zapLogger
 // because the log package is called concurrently by multiple request,
 // X-Request-ID is protected against contamination
 func (l *zapLogger) clone() *zapLogger {

@@ -8,4 +8,7 @@ package known
 const (
 	// XRequestIDKey is used to define the key in the Gin context representing the request UUID.
 	XRequestIDKey = "X-Request-Id"
+
+	// XUsernameKey is used to define the key in the Gin context representing the request username.
+	XUsernameKey = "X-Username"
 )

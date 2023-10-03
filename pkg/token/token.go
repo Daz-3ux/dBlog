@@ -43,6 +43,8 @@ func Init(key string, identityKey string) {
 }
 
 // Parse uses the specified key to parse the token. If successful, it returns the token context; otherwise, it returns an error
+// tokenString is the token to be parsed
+// key is the secret key used to sign the token
 func Parse(tokenString string, key string) (string, error) {
 	// parse token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -50,6 +52,7 @@ func Parse(tokenString string, key string) (string, error) {
 			return nil, jwt.ErrSignatureInvalid
 		}
 
+		// return the key used to sign the token
 		return []byte(key), nil
 	})
 
@@ -87,15 +90,20 @@ func ParseRequest(c *gin.Context) (string, error) {
 // Sign issues a token using jwtSecret
 // the token's claims will contain the provided subject
 func Sign(identityKey string) (string, error) {
+	// create a token with claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		config.identityKey: identityKey,
-		"iss":              "daz",
-		"nbf":              time.Now().Unix(),
-		"iat":              time.Now().Unix(),
-		"exp":              time.Now().Add(time.Hour * 24 * 7).Unix(),
+		config.identityKey: identityKey,                               // JWT token identification
+		"iss":              "daz",                                     // token issuer
+		"nbf":              time.Now().Unix(),                         // token not valid before
+		"iat":              time.Now().Unix(),                         // token issued at
+		"exp":              time.Now().Add(time.Hour * 24 * 7).Unix(), // token expiration time
 	})
 
 	// sign the token
+	// tokenString = Header.Payload.Signature
+	// jwt.SigningMethodHS256 is the Header
+	// jwt.MapClaims is the Payload
+	// []byte(config.key) is the Signature
 	tokenString, err := token.SignedString([]byte(config.key))
 
 	return tokenString, err

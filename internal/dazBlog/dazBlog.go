@@ -90,6 +90,7 @@ func run() error {
 		return err
 	}
 
+	// set the secret key used to sign and parse the token
 	token.Init(viper.GetString("jwt-secret"), known.XUsernameKey)
 
 	// set Gin mode

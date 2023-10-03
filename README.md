@@ -8,6 +8,7 @@
 - 开发顺序:
   - Model -> Store -> Biz -> Controller
   - 从下到上，优先开发依赖少的组件
+  - 一次性开发完一整条链路, 从而保证整个链路的可用性
   - [Model](./internal/pkg/model/README.md)
   - [Store](./internal/dazBlog/store/README.md)
   - [Biz](./internal/dazBlog/biz/README.md)
@@ -18,3 +19,6 @@
 
 ## 版本信息
 [打印详细版本信息](./pkg/version/README.md)
+
+## 认证系统
+[dBlog的认证与授权](./docs/devel/zh-CN/conversions/auth.md)

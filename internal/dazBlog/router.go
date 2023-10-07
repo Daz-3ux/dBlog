@@ -40,13 +40,35 @@ func installRouters(g *gin.Engine) error {
 		// create user's route group
 		userv1 := v1.Group("/users")
 		{
+			// create user
 			userv1.POST("", uc.Create)
+			// change user password
 			userv1.PUT(":name/change-password", uc.ChangePassword)
+			// get user info
+			userv1.GET(":name", uc.Get)
+			// update user info
+			userv1.PUT(":name", uc.Update)
+			// list all users, only root user can access
+			userv1.GET("", uc.List)
+			userv1.DELETE(":name", uc.Delete)
+			// middleware
 			userv1.Use(mw.Authn())
 		}
+
 		postv1 := v1.Group("/posts")
 		{
+			// create post
 			postv1.POST("", pc.Create)
+			// get post
+			postv1.GET(":postID", pc.Get)
+			// update post
+			postv1.PUT(":postID", pc.Update)
+			// delete post
+			postv1.DELETE(":postID", pc.Delete)
+			// batch delete posts
+			postv1.DELETE("", pc.DeleteCollection)
+			// list posts
+			postv1.GET("", pc.List)
 		}
 	}
 

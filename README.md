@@ -20,5 +20,5 @@
 ## 版本信息
 [打印详细版本信息](./pkg/version/README.md)
 
-## 认证系统
+## 认证授权系统
 [dBlog的认证与授权](./docs/devel/zh-CN/conversions/auth.md)

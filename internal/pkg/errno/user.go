@@ -8,6 +8,7 @@ package errno
 var (
 	// ErrUserAlreadyExist represents user already exists
 	ErrUserAlreadyExist  = &Errno{HTTP: 400, Code: "FailedOperation.UserAlreadyExist", Message: "User already exists."}
+	ErrTitleAlreadyExist = &Errno{HTTP: 400, Code: "FailedOperation.TitleAlreadyExist", Message: "Title already exists."}
 	ErrUserNotFound      = &Errno{HTTP: 404, Code: "ResourceNotFound.UserNotFound", Message: "User not found."}
 	ErrPasswordIncorrect = &Errno{HTTP: 401, Code: "InvalidParameter.PasswordIncorrect", Message: "Password incorrect."}
 )

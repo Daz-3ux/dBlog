@@ -5,7 +5,11 @@
 
 package model
 
-import "time"
+import (
+	"github.com/Daz-3ux/dBlog/pkg/util/id"
+	"gorm.io/gorm"
+	"time"
+)
 
 type PostM struct {
 	ID        int64     `gorm:"column:id;primary_key"` // unique id for the post, server as the primary key
@@ -20,4 +24,10 @@ type PostM struct {
 // TableName sets the insert table name for this struct type
 func (p *PostM) TableName() string {
 	return "posts"
+}
+
+func (p *PostM) BeforeCreate(tx *gorm.DB) error {
+	p.PostID = "post-" + id.GenShortID()
+
+	return nil
 }

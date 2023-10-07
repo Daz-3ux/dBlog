@@ -7,6 +7,7 @@ package store
 
 import (
 	"context"
+	"errors"
 	"github.com/Daz-3ux/dBlog/internal/pkg/model"
 	"gorm.io/gorm"
 )
@@ -14,8 +15,10 @@ import (
 // UserStore defines the methods that need to be implemented by the user model in the store layer
 type UserStore interface {
 	Create(ctx context.Context, user *model.UserM) error
-	Get(ctx context.Context, username string) (*model.UserM, error)
+	Get(ctx context.Context, id string) (*model.UserM, error)
 	Update(ctx context.Context, user *model.UserM) error
+	List(ctx context.Context, offset, limit int) (int64, []*model.UserM, error)
+	Delete(ctx context.Context, username string) error
 }
 
 // users is the implementation of UserStore interface
@@ -36,9 +39,9 @@ func (u *users) Create(ctx context.Context, user *model.UserM) error {
 }
 
 // Get returns the user record with the specified username
-func (u *users) Get(ctx context.Context, username string) (*model.UserM, error) {
+func (u *users) Get(ctx context.Context, id string) (*model.UserM, error) {
 	var user model.UserM
-	if err := u.db.Where("username = ?", username).First(&user).Error; err != nil {
+	if err := u.db.Where("id = ?", id).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -47,4 +50,27 @@ func (u *users) Get(ctx context.Context, username string) (*model.UserM, error) 
 // Update updates the user record in the database
 func (u *users) Update(ctx context.Context, user *model.UserM) error {
 	return u.db.Save(&user).Error
+}
+
+func (u *users) List(ctx context.Context, offset, limit int) (count int64, ret []*model.UserM, err error) {
+	err = u.db.Offset(offset).Limit(defaultLimit(limit)).
+		// descending order the results by id
+		Order("id DESC").
+		// find the results
+		Find(&ret).
+		Offset(-1).
+		Limit(-1).
+		Count(&count).
+		Error
+
+	return
+}
+
+func (u *users) Delete(ctx context.Context, username string) error {
+	err := u.db.Where("username = ?", username).Delete(&model.UserM{}).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return err
+	}
+
+	return nil
 }

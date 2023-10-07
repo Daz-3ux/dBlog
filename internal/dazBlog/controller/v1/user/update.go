@@ -3,38 +3,38 @@
 // license that can be found in the LICENSE file. The original repo for
 // this file is https://github.com/Daz-3ux/dBlog.
 
-package post
+package user
 
 import (
 	"github.com/Daz-3ux/dBlog/internal/pkg/core"
 	"github.com/Daz-3ux/dBlog/internal/pkg/errno"
-	"github.com/Daz-3ux/dBlog/internal/pkg/known"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 )
 
-// Create a new post
-func (ctrl *PostController) Create(c *gin.Context) {
-	log.C(c).Infow("Create post function called")
+func (ctrl *UserController) Update(c *gin.Context) {
+	log.C(c).Infow("Update user function called")
 
-	var r v1.CreatePostRequest
+	var r v1.UpdateUserRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		core.WriteResponse(c, errno.ErrBind, nil)
+
 		return
 	}
 
 	if _, err := govalidator.ValidateStruct(r); err != nil {
 		core.WriteResponse(c, errno.ErrInvalidParameter.SetMessage(err.Error()), nil)
+
 		return
 	}
 
-	resp, err := ctrl.b.Posts().Create(c, c.GetString(known.XUsernameKey), &r)
-	if err != nil {
+	if err := ctrl.b.Users().Update(c, c.Param("name"), &r); err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 
-	core.WriteResponse(c, nil, resp)
+	core.WriteResponse(c, nil, nil)
 }

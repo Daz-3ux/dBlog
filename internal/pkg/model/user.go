@@ -13,6 +13,7 @@ import (
 
 type UserM struct {
 	ID        int64     `gorm:"column:id;primary_key"` // unique id for the user, server as the primary key
+	PostCount int64     `gorm:"column:postCount"`      // number of posts the user has
 	Username  string    `gorm:"column:username"`       // username of the user
 	Password  string    `gorm:"column:password"`       // password of the user
 	Nickname  string    `gorm:"column:nickname"`       // nickname of the user

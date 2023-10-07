@@ -58,3 +58,6 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MjgwMTY5MjIsImlkIjowLCJuYmYiOjE
   - PUT 用于更新,是一个幂等操作
 
 ## 授权 - Authorization - Authz
+- 使用 RBAC (Role-Based Access Control) 模型进行授权
+  - 基于 [casbin](./useCasbin.md) 进行开发
+  - 

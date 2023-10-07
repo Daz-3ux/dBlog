@@ -11,28 +11,23 @@ import (
 	"github.com/Daz-3ux/dBlog/internal/pkg/known"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
-	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 )
 
-// Create a new post
-func (ctrl *PostController) Create(c *gin.Context) {
-	log.C(c).Infow("Create post function called")
+func (ctrl *PostController) List(c *gin.Context) {
+	log.C(c).Infow("List post function called")
 
-	var r v1.CreatePostRequest
+	var r v1.ListPostsRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		core.WriteResponse(c, errno.ErrBind, nil)
+
 		return
 	}
 
-	if _, err := govalidator.ValidateStruct(r); err != nil {
-		core.WriteResponse(c, errno.ErrInvalidParameter.SetMessage(err.Error()), nil)
-		return
-	}
-
-	resp, err := ctrl.b.Posts().Create(c, c.GetString(known.XUsernameKey), &r)
+	resp, err := ctrl.b.Posts().List(c, c.GetString(known.XUsernameKey), r.Offset, r.Limit)
 	if err != nil {
 		core.WriteResponse(c, err, nil)
+
 		return
 	}
 

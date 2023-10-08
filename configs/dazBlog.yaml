@@ -8,6 +8,12 @@ runmode: debug    # Gin run mode, debug / release / test
 addr: :8081        # HTTP server listen port
 jwt-secret: szO8T9zWx+AyZB1le9MaEG7MCToMVcELHZYiakv1rRE
 
+# HTTPS server config
+tls:
+  addr: :8443
+  cert: ./_output/cert/server.crt
+  key: ./_output/cert/server.key
+
 # mysql configs
 db:
   host: 127.0.0.1

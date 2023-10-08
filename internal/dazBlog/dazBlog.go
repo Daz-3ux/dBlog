@@ -32,17 +32,14 @@ func NewDazBlogCommand() *cobra.Command {
 	// cmd is the *cobra.Command object and the top-level command
 	cmd := &cobra.Command{
 		// specify the name of the command
-		Use: "dBlog",
-		// specify the short description of the command
-		Short: "dBlog is a simple blog system",
-		// specify the long description of the command
+		Use:   "dBlog",                         // specify the short description of the command
+		Short: "dBlog is a simple blog system", // specify the long description of the command
 		Long: `dBlog is a simple but not easy blog system,
 Find more dBlog information at:
 	https://github.com/daz-3ux/dBlog#readme`,
 
 		// when an error occurs, the command will not print usage information
-		SilenceUsage: true,
-		// specify the run function to execute when cmd.Execute() is called
+		SilenceUsage: true, // specify the run function to execute when cmd.Execute() is called
 		// if the function fails, an error message will be returned
 		RunE: func(cmd *cobra.Command, args []string) error {
 			verflag.PrintAndExitIfRequested()
@@ -51,8 +48,7 @@ Find more dBlog information at:
 			defer log.Sync()
 
 			return run()
-		},
-		// no need to specify command line parameters
+		}, // no need to specify command line parameters
 		Args: func(cmd *cobra.Command, args []string) error {
 			for _, arg := range args {
 				if len(arg) > 0 {
@@ -109,19 +105,9 @@ func run() error {
 	}
 
 	// create HTTP server
-	httpsrv := &http.Server{
-		Addr:    viper.GetString("addr"),
-		Handler: g,
-	}
-
-	// start HTTP server
-	log.Infow("Start HTTP listening", "address", httpsrv.Addr)
-	// anonymous goroutine, listen and serve on HTTPS
-	go func() {
-		if err := httpsrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Fatalw(err.Error())
-		}
-	}()
+	httpsrv := startInsecureServer(g)
+	// create HTTPS server
+	httpssrv := startSecureServer(g)
 
 	// wait for an interrupt signal to gracefully shut down the server with a 10s timeout
 	quit := make(chan os.Signal, 1)
@@ -142,8 +128,52 @@ func run() error {
 		log.Fatalw("Insecure Server forced to shutdown:", "err", err)
 		return err
 	}
+	if err := httpssrv.Shutdown(ctx); err != nil {
+		log.Errorw("Secure Server forced to shutdown:", "err", err)
+	}
 
 	log.Infow("Server exiting")
 
 	return nil
+}
+
+// startInsecureServer create and Run HTTP server
+func startInsecureServer(g *gin.Engine) *http.Server {
+	// create HTTP server instance
+	httpsrv := &http.Server{
+		Addr:    viper.GetString("addr"),
+		Handler: g,
+	}
+
+	// start the server in a goroutine
+	log.Infow("Start to listening the incoming requests on http address", "addr", viper.GetString("addr"))
+	go func() {
+		if err := httpsrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalw(err.Error())
+		}
+	}()
+
+	return httpsrv
+}
+
+// startSecureServer create and Run HTTPS server
+func startSecureServer(g *gin.Engine) *http.Server {
+	// create HTTPS Server instance
+	httpssrv := &http.Server{
+		Addr:    viper.GetString("tls.addr"),
+		Handler: g,
+	}
+
+	// start the server in a goroutine
+	log.Infow("Start to listening the incoming requests on https address", "addr", viper.GetString("tls.addr"))
+	cert, key := viper.GetString("tls.cert"), viper.GetString("tls.key")
+	if cert != "" && key != "" {
+		go func() {
+			if err := httpssrv.ListenAndServeTLS(cert, key); err != nil && !errors.Is(err, http.ErrServerClosed) {
+				log.Fatalw(err.Error())
+			}
+		}()
+	}
+
+	return httpssrv
 }

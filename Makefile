@@ -64,3 +64,24 @@ tidy: # auto add/remove dependency packages
 .PHONY: clean
 clean: # clean build output and temporary files
 	-rm -vrf $(OUTPUT_DIR)
+
+.PHONY: ca
+ca: ## generate CA file
+	@mkdir -p $(OUTPUT_DIR)/cert
+	# 1. generate root certificate private key
+	@openssl genrsa -out $(OUTPUT_DIR)/cert/ca.key 4096
+ 	# 2. generate request file
+	@openssl req -new -key $(OUTPUT_DIR)/cert/ca.key -out $(OUTPUT_DIR)/cert/ca.csr \
+  	-subj "/C=CN/ST=Shannxi/L=Xi'an/O=devops/OU=XiyouLUG/CN=127.0.0.1/emailAddress=daz-3ux@proton.me"
+  	# 3. generate root certificate
+	@openssl x509 -req -in $(OUTPUT_DIR)/cert/ca.csr -signkey $(OUTPUT_DIR)/cert/ca.key -out $(OUTPUT_DIR)/cert/ca.crt
+	# 4. generate server private key
+	@openssl genrsa -out $(OUTPUT_DIR)/cert/server.key 1024
+	# 5. generate server public key
+	@openssl rsa -in $(OUTPUT_DIR)/cert/server.key -pubout -out $(OUTPUT_DIR)/cert/server.pem
+	# 6. generate CSR for server to request signing from CA
+	@openssl req -new -key $(OUTPUT_DIR)/cert/server.key -out $(OUTPUT_DIR)/cert/server.csr \
+  	-subj "/C=CN/ST=Guangdong/L=Shenzhen/O=serverdevops/OU=serverit/CN=127.0.0.1/emailAddress=daz-3ux@proton.me"
+  	# 7.  generate server certificate signed by CA
+	@openssl x509 -req -CA $(OUTPUT_DIR)/cert/ca.crt -CAkey $(OUTPUT_DIR)/cert/ca.key \
+  	-CAcreateserial -in $(OUTPUT_DIR)/cert/server.csr -out $(OUTPUT_DIR)/cert/server.crt

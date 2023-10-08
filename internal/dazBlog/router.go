@@ -13,6 +13,7 @@ import (
 	"github.com/Daz-3ux/dBlog/internal/pkg/errno"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	mw "github.com/Daz-3ux/dBlog/internal/pkg/middleware"
+	"github.com/Daz-3ux/dBlog/pkg/auth"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,7 +31,12 @@ func installRouters(g *gin.Engine) error {
 		core.WriteResponse(c, nil, map[string]string{"status": "ok"})
 	})
 
-	uc := user.NewUserController(store.S)
+	authz, err := auth.NewAuthz(store.S.DB())
+	if err != nil {
+		return err
+	}
+
+	uc := user.NewUserController(store.S, authz)
 	pc := post.NewPostController(store.S)
 
 	g.POST("/login", uc.Login)
@@ -44,15 +50,16 @@ func installRouters(g *gin.Engine) error {
 			userv1.POST("", uc.Create)
 			// change user password
 			userv1.PUT(":name/change-password", uc.ChangePassword)
+			// middleware
+			userv1.Use(mw.Authn(), mw.Authz(authz))
 			// get user info
 			userv1.GET(":name", uc.Get)
 			// update user info
 			userv1.PUT(":name", uc.Update)
 			// list all users, only root user can access
 			userv1.GET("", uc.List)
+			// delete user
 			userv1.DELETE(":name", uc.Delete)
-			// middleware
-			userv1.Use(mw.Authn())
 		}
 
 		postv1 := v1.Group("/posts")

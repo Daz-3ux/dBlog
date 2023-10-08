@@ -6,7 +6,11 @@
 package auth
 
 import (
-	"github.com/casbin/casbin/v2"
+	casbin "github.com/casbin/casbin/v2"
+	"github.com/casbin/casbin/v2/model"
+	adapter "github.com/casbin/gorm-adapter/v3"
+	"gorm.io/gorm"
+	"time"
 )
 
 const (
@@ -24,7 +28,39 @@ e = some(where (p.eft == allow))
 m = r.sub == p.sub && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)`
 )
 
-// Authz defines a adapter for casbin
+// Authz defines an adapter for casbin, providing authorization function
 type Authz struct {
 	*casbin.SyncedEnforcer
+}
+
+// NewAuthz creates an authorizer using casbin for authorization
+func NewAuthz(db *gorm.DB) (*Authz, error) {
+	// Init a Gorm adapterByDB and use it in a Casbin enforcer
+	adapterByDB, err := adapter.NewAdapterByDB(db)
+	if err != nil {
+		return nil, err
+	}
+
+	m, _ := model.NewModelFromString(aclModel)
+
+	// Init the enforcer
+	enforcer, err := casbin.NewSyncedEnforcer(m, adapterByDB)
+	if err != nil {
+		return nil, err
+	}
+
+	// Load the policy from DB
+	if err := enforcer.LoadPolicy(); err != nil {
+		return nil, err
+	}
+	enforcer.StartAutoLoadPolicy(5 * time.Second)
+
+	a := &Authz{enforcer}
+
+	return a, nil
+}
+
+// Authorize is used for authorization
+func (a *Authz) Authorize(sub, obj, act string) (bool, error) {
+	return a.Enforce(sub, obj, act)
 }

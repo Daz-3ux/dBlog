@@ -25,6 +25,7 @@ var (
 // IStore defines the methods that need to be implemented by the Store layer
 // such as IStore defines Users, Users defines the specific methods
 type IStore interface {
+	DB() *gorm.DB
 	Users() UserStore
 	Posts() PostStore
 }
@@ -53,11 +54,17 @@ func NewStore(db *gorm.DB) *datastore {
 	return S
 }
 
+// DB return the *gorm.DB object in the datastore
+func (ds *datastore) DB() *gorm.DB {
+	return ds.db
+}
+
 // Users return an instance of UserStore
 func (ds *datastore) Users() UserStore {
 	return newUsers(ds.db)
 }
 
+// Posts return an instance of PostStore
 func (ds *datastore) Posts() PostStore {
 	return newPosts(ds.db)
 }

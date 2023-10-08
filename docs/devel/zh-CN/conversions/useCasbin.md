@@ -61,9 +61,9 @@ m = r.sub == p.sub && r.obj == p.obj && r.act == p.act
   - 也就是对 API 路径进行授权
 - 授权策略:   
 
-| A | B    | C              | D                        |
-|---|------|----------------|--------------------------|
-| p | root | /v1/users*     | (GET)(POST)(PUT)(DELETE) |
-| p | bob  | /v1/users/belm | (GET)(POST)(PUT)(DELETE) |
+| A | B    | C             | D                        |
+|---|------|---------------|--------------------------|
+| p | root | /v1/users*    | (GET)(POST)(PUT)(DELETE) |
+| p | bob  | /v1/users/bob | (GET)(POST)(PUT)(DELETE) |
 
 - 因为要对每一个 HTTP 进行授权, 所以将授权功能封装为中间件

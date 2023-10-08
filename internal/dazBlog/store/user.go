@@ -15,7 +15,7 @@ import (
 // UserStore defines the methods that need to be implemented by the user model in the store layer
 type UserStore interface {
 	Create(ctx context.Context, user *model.UserM) error
-	Get(ctx context.Context, id string) (*model.UserM, error)
+	Get(ctx context.Context, username string) (*model.UserM, error)
 	Update(ctx context.Context, user *model.UserM) error
 	List(ctx context.Context, offset, limit int) (int64, []*model.UserM, error)
 	Delete(ctx context.Context, username string) error
@@ -39,9 +39,9 @@ func (u *users) Create(ctx context.Context, user *model.UserM) error {
 }
 
 // Get returns the user record with the specified username
-func (u *users) Get(ctx context.Context, id string) (*model.UserM, error) {
+func (u *users) Get(ctx context.Context, username string) (*model.UserM, error) {
 	var user model.UserM
-	if err := u.db.Where("id = ?", id).First(&user).Error; err != nil {
+	if err := u.db.Where("username = ?", username).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil

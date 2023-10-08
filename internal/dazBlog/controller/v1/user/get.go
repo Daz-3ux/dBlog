@@ -15,7 +15,7 @@ import (
 func (ctrl *UserController) Get(c *gin.Context) {
 	log.C(c).Infow("Get user function called")
 
-	id := c.Param("id")
+	id := c.Param("name")
 	user, err := ctrl.b.Users().Get(c, id)
 	if err != nil {
 		core.WriteResponse(c, err, nil)

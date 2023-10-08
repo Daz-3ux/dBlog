@@ -8,12 +8,14 @@ package user
 import (
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz"
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
+	"github.com/Daz-3ux/dBlog/pkg/auth"
 )
 
 type UserController struct {
+	a *auth.Authz
 	b biz.IBiz
 }
 
-func NewUserController(ds store.IStore) *UserController {
-	return &UserController{b: biz.NewBiz(ds)}
+func NewUserController(ds store.IStore, a *auth.Authz) *UserController {
+	return &UserController{a: a, b: biz.NewBiz(ds)}
 }

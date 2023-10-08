@@ -22,3 +22,6 @@
 
 ## 认证授权系统
 [dBlog的认证与授权](./docs/devel/zh-CN/conversions/auth.md)
+
+## HTTPS 的使用
+[使用HTTPS](./docs/devel/zh-CN/conversions/https.md)

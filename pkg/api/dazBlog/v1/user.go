@@ -8,7 +8,7 @@ package v1
 // CreateUserRequest specifies the request parameters for
 // `POST /v1/users`
 type CreateUserRequest struct {
-	PostCount string `json:"postcount" valid:"required,stringlength(1|255)"`
+	Postcount int64  `json:"postcount" valid:"required,stringlength(1|255)"`
 	Username  string `json:"username" valid:"alphanum,required,stringlength(1|255)"`
 	Password  string `json:"password" valid:"required,stringlength(6|18)"`
 	Nickname  string `json:"nickname" valid:"required,stringlength(1|255)"`
@@ -26,7 +26,7 @@ type UserInfo struct {
 	Nickname  string `json:"nickname"`
 	Email     string `json:"email"`
 	Phone     string `json:"phone"`
-	PostCount int64  `json:"postCount"`
+	PostCount int64  `json:"postcount"`
 	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
 }

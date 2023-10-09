@@ -23,7 +23,7 @@ db:
   max-idle-connections: 100
   max-open-connections: 100
   max-connection-life-time: 10s
-  log-level: 4 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
+  log-level: 2 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
 
 # log configs
 log:

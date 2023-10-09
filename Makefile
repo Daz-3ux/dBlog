@@ -76,7 +76,7 @@ ca: ## generate CA file
   	# 3. generate root certificate
 	@openssl x509 -req -in $(OUTPUT_DIR)/cert/ca.csr -signkey $(OUTPUT_DIR)/cert/ca.key -out $(OUTPUT_DIR)/cert/ca.crt
 	# 4. generate server private key
-	@openssl genrsa -out $(OUTPUT_DIR)/cert/server.key 1024
+	@openssl genrsa -out $(OUTPUT_DIR)/cert/server.key 4096
 	# 5. generate server public key
 	@openssl rsa -in $(OUTPUT_DIR)/cert/server.key -pubout -out $(OUTPUT_DIR)/cert/server.pem
 	# 6. generate CSR for server to request signing from CA

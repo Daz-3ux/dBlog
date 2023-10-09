@@ -32,3 +32,27 @@
      - 在 `configs/dazBlog.yaml` 中进行配置
   3. `tls` 证书文件, 并启动 `HTTPS` 服务器
      - 在 `internal/dazBlog/dazBlog` 中进行配置
+
+## 实现流程
+### Makefile
+```shell
+# 签发根证书和私钥
+	# 1. 生成根证书私钥
+	@openssl genrsa -out $(OUTPUT_DIR)/cert/ca.key 4096
+ 	# 2. 生成根证书请求文件
+	@openssl req -new -key $(OUTPUT_DIR)/cert/ca.key -out $(OUTPUT_DIR)/cert/ca.csr \
+  	-subj "/C=CN/ST=Shannxi/L=Xi'an/O=devops/OU=XiyouLUG/CN=127.0.0.1/emailAddress=daz-3ux@proton.me"
+  	# 3. 生成根证书
+# 生成服务端证书
+	@openssl x509 -req -in $(OUTPUT_DIR)/cert/ca.csr -signkey $(OUTPUT_DIR)/cert/ca.key -out $(OUTPUT_DIR)/cert/ca.crt
+	# 1. 生成服务端私钥
+	@openssl genrsa -out $(OUTPUT_DIR)/cert/server.key 4096
+	# 2. 生产服务端公钥
+	@openssl rsa -in $(OUTPUT_DIR)/cert/server.key -pubout -out $(OUTPUT_DIR)/cert/server.pem
+	# 3. 生成服务端向 CA 申请签名的 CSR 文件
+	@openssl req -new -key $(OUTPUT_DIR)/cert/server.key -out $(OUTPUT_DIR)/cert/server.csr \
+  	-subj "/C=CN/ST=Guangdong/L=Shenzhen/O=serverdevops/OU=serverit/CN=127.0.0.1/emailAddress=daz-3ux@proton.me"
+  	# 4. 生成服务端带有 CA 签名的证书
+	@openssl x509 -req -CA $(OUTPUT_DIR)/cert/ca.crt -CAkey $(OUTPUT_DIR)/cert/ca.key \
+  	-CAcreateserial -in $(OUTPUT_DIR)/cert/server.csr -out $(OUTPUT_DIR)/cert/server.crt
+```

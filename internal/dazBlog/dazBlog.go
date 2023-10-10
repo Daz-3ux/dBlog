@@ -9,14 +9,19 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/controller/v1/user"
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
 	"github.com/Daz-3ux/dBlog/internal/pkg/known"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	mw "github.com/Daz-3ux/dBlog/internal/pkg/middleware"
+	pb "github.com/Daz-3ux/dBlog/pkg/proto/dazBlog/v1"
 	"github.com/Daz-3ux/dBlog/pkg/token"
 	"github.com/Daz-3ux/dBlog/pkg/version/verflag"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"google.golang.org/grpc"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -108,6 +113,8 @@ func run() error {
 	httpsrv := startInsecureServer(g)
 	// create HTTPS server
 	httpssrv := startSecureServer(g)
+	// create gRPC server
+	grpcsrv := startGRPCServer()
 
 	// wait for an interrupt signal to gracefully shut down the server with a 10s timeout
 	quit := make(chan os.Signal, 1)
@@ -130,7 +137,9 @@ func run() error {
 	}
 	if err := httpssrv.Shutdown(ctx); err != nil {
 		log.Errorw("Secure Server forced to shutdown:", "err", err)
+		return err
 	}
+	grpcsrv.GracefulStop()
 
 	log.Infow("Server exiting")
 
@@ -176,4 +185,26 @@ func startSecureServer(g *gin.Engine) *http.Server {
 	}
 
 	return httpssrv
+}
+
+// startGRPCServer create and Run gRPC server
+func startGRPCServer() *grpc.Server {
+	lis, err := net.Listen("tcp", viper.GetString("grpc.addr"))
+	if err != nil {
+		log.Fatalw("failed to listen", "err", err)
+	}
+
+	// create gRPC server instance
+	grpcsrv := grpc.NewServer()
+	pb.RegisterDazBlogServer(grpcsrv, user.NewUserController(store.S, nil))
+
+	// start the server in a goroutine
+	log.Infow("Start to listening the incoming requests on gRPC address", "addr", viper.GetString("grpc.addr"))
+	go func() {
+		if err := grpcsrv.Serve(lis); err != nil {
+			log.Fatalw("failed to serve", "err", err)
+		}
+	}()
+
+	return grpcsrv
 }

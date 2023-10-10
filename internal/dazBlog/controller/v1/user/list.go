@@ -6,10 +6,14 @@
 package user
 
 import (
+	"context"
 	"github.com/Daz-3ux/dBlog/internal/pkg/core"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
+	pb "github.com/Daz-3ux/dBlog/pkg/proto/dazBlog/v1"
 	"github.com/gin-gonic/gin"
+	"google.golang.org/protobuf/types/known/timestamppb"
+	"time"
 )
 
 // List return users list, only root user can call this function
@@ -31,4 +35,36 @@ func (ctrl *UserController) List(c *gin.Context) {
 	}
 
 	core.WriteResponse(c, nil, resp)
+}
+
+// ListUsers return users list for gRPC
+func (ctrl *UserController) ListUsers(ctx context.Context, r *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
+	log.C(ctx).Infow("ListUsers function called")
+
+	resp, err := ctrl.b.Users().List(ctx, int(r.Offset), int(r.Limit))
+	if err != nil {
+		return nil, err
+	}
+
+	users := make([]*pb.UserInfo, 0, len(resp.Users))
+	for _, u := range resp.Users {
+		createdAt, _ := time.Parse("2006-01-02 15:04:05", u.CreatedAt)
+		updatedAt, _ := time.Parse("2006-01-02 15:04:05", u.UpdatedAt)
+		users = append(users, &pb.UserInfo{
+			Username:  u.Username,
+			Nickname:  u.Nickname,
+			Email:     u.Email,
+			Phone:     u.Phone,
+			Postcount: u.PostCount,
+			CreatedAt: timestamppb.New(createdAt),
+			UpdatedAt: timestamppb.New(updatedAt),
+		})
+	}
+
+	ret := &pb.ListUsersResponse{
+		TotalCount: resp.TotalCount,
+		Users:      users,
+	}
+
+	return ret, nil
 }

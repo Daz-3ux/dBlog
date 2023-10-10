@@ -9,11 +9,13 @@ import (
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz"
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
 	"github.com/Daz-3ux/dBlog/pkg/auth"
+	pb "github.com/Daz-3ux/dBlog/pkg/proto/dazBlog/v1"
 )
 
 type UserController struct {
 	a *auth.Authz
 	b biz.IBiz
+	pb.UnimplementedDazBlogServer
 }
 
 func NewUserController(ds store.IStore, a *auth.Authz) *UserController {

@@ -1,0 +1,31 @@
+// Copyright 2023 daz-3ux(杨鹏达) <daz-3ux@proton.me>. All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file. The original repo for
+// this file is https://github.com/Daz-3ux/dBlog.
+
+syntax = "proto3"; // specify the version of proto
+
+package v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/Daz-3ux/dBlog/pkg/proto/dazBlog/v1";
+
+// DazBlog defines a DazBlog RPC service
+service DazBlog {rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);}
+
+message UserInfo {string username = 1;
+  string nickname = 2;
+  string email = 3;
+  string phone = 4;
+  int64 postcount = 5;
+  google.protobuf.Timestamp createdAt = 6;
+  google.protobuf.Timestamp updatedAt = 7;}
+
+// ListUserRequest specifies the request for `ListUser` endpoint
+message ListUsersRequest {int64 limit = 1;
+  int64 offset = 2;}
+
+// ListUserResponse specifies the response for `ListUser` endpoint
+message ListUsersResponse {int64 totalCount = 1;
+  repeated UserInfo users = 2;}

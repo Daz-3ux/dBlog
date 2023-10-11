@@ -10,6 +10,11 @@ package user
 import (
 	"context"
 	"errors"
+	"regexp"
+
+	"github.com/jinzhu/copier"
+	"gorm.io/gorm"
+
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
 	"github.com/Daz-3ux/dBlog/internal/pkg/errno"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
@@ -17,9 +22,6 @@ import (
 	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
 	"github.com/Daz-3ux/dBlog/pkg/auth"
 	"github.com/Daz-3ux/dBlog/pkg/token"
-	"github.com/jinzhu/copier"
-	"gorm.io/gorm"
-	"regexp"
 )
 
 // UserBiz defines the methods implemented in the user module at the biz layer

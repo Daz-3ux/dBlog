@@ -13,8 +13,9 @@ import (
 	context "context"
 	reflect "reflect"
 
-	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
 	gomock "github.com/golang/mock/gomock"
+
+	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
 )
 
 // MockPostBiz is a mock of PostBiz interface.

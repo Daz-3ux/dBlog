@@ -8,8 +8,10 @@ package store
 import (
 	"context"
 	"errors"
-	"github.com/Daz-3ux/dBlog/internal/pkg/model"
+
 	"gorm.io/gorm"
+
+	"github.com/Daz-3ux/dBlog/internal/pkg/model"
 )
 
 // UserStore defines the methods that need to be implemented by the user model in the store layer

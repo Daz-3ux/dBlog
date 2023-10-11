@@ -6,11 +6,13 @@
 package post
 
 import (
-	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz"
-	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
+	"testing"
+
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
-	"testing"
+
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz"
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
 )
 
 func TestNew(t *testing.T) {

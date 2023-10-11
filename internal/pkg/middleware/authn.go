@@ -6,11 +6,12 @@
 package middleware
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/Daz-3ux/dBlog/internal/pkg/core"
 	"github.com/Daz-3ux/dBlog/internal/pkg/errno"
 	"github.com/Daz-3ux/dBlog/internal/pkg/known"
 	"github.com/Daz-3ux/dBlog/pkg/token"
-	"github.com/gin-gonic/gin"
 )
 
 // Authn is an authentication Gin middleware used to extract and validate a token from gin.Context

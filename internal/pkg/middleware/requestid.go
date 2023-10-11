@@ -6,9 +6,10 @@
 package middleware
 
 import (
-	"github.com/Daz-3ux/dBlog/internal/pkg/known"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+
+	"github.com/Daz-3ux/dBlog/internal/pkg/known"
 )
 
 // RequestID is a Gin middleware used to inject the `X-Request-ID` key-value pair into the context and response of each HTTP request

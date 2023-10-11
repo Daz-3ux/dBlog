@@ -8,9 +8,11 @@ package log
 
 import (
 	"context"
-	"github.com/Daz-3ux/dBlog/internal/pkg/known"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+
+	"github.com/Daz-3ux/dBlog/internal/pkg/known"
 
 	"sync"
 	"time"
@@ -117,9 +119,7 @@ func Sync() {
 }
 
 func (l *zapLogger) Sync() {
-	if err := l.z.Sync(); err != nil {
-		l.z.Error("log sync error", zap.Error(err))
-	}
+	_ = l.z.Sync()
 }
 
 // Debugw print debug level log

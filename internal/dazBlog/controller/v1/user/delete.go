@@ -6,9 +6,10 @@
 package user
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/Daz-3ux/dBlog/internal/pkg/core"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
-	"github.com/gin-gonic/gin"
 )
 
 func (ctrl *UserController) Delete(c *gin.Context) {

@@ -8,16 +8,18 @@ package user
 import (
 	"context"
 	"fmt"
+	"testing"
+	"time"
+
 	"github.com/AlekSi/pointer"
+	"github.com/golang/mock/gomock"
+	"github.com/jinzhu/copier"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
 	"github.com/Daz-3ux/dBlog/internal/pkg/errno"
 	"github.com/Daz-3ux/dBlog/internal/pkg/model"
 	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
-	"github.com/golang/mock/gomock"
-	"github.com/jinzhu/copier"
-	"github.com/stretchr/testify/assert"
-	"testing"
-	"time"
 )
 
 func fakeUser(id int64) *model.UserM {

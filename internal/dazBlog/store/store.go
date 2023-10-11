@@ -6,8 +6,9 @@
 package store
 
 import (
-	"gorm.io/gorm"
 	"sync"
+
+	"gorm.io/gorm"
 )
 
 //go:generate mockgen -destination mock_store.go -package store github.com/Daz-3ux/dBlog/internal/dazBlog/store IStore,UserStore,PostStore

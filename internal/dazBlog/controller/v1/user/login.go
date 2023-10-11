@@ -6,12 +6,13 @@
 package user
 
 import (
+	"github.com/asaskevich/govalidator"
+	"github.com/gin-gonic/gin"
+
 	"github.com/Daz-3ux/dBlog/internal/pkg/core"
 	"github.com/Daz-3ux/dBlog/internal/pkg/errno"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
-	"github.com/asaskevich/govalidator"
-	"github.com/gin-gonic/gin"
 )
 
 func (ctrl *UserController) Login(c *gin.Context) {

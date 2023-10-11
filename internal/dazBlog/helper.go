@@ -6,14 +6,16 @@
 package dazBlog
 
 import (
-	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
-	"github.com/Daz-3ux/dBlog/internal/pkg/log"
-	"github.com/Daz-3ux/dBlog/pkg/db"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
+	"github.com/Daz-3ux/dBlog/internal/pkg/log"
+	"github.com/Daz-3ux/dBlog/pkg/db"
 )
 
 const (

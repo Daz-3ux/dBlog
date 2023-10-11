@@ -6,9 +6,11 @@
 package model
 
 import (
-	"github.com/Daz-3ux/dBlog/pkg/util/id"
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
+
+	"github.com/Daz-3ux/dBlog/pkg/util/id"
 )
 
 type PostM struct {

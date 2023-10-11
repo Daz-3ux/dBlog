@@ -6,8 +6,9 @@
 package id
 
 import (
-	shortid "github.com/jasonsoft/go-short-id"
 	"strings"
+
+	shortid "github.com/jasonsoft/go-short-id"
 )
 
 func GenShortID() string {

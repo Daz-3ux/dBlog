@@ -8,11 +8,13 @@ package token
 import (
 	"errors"
 	"fmt"
-	"github.com/Daz-3ux/dBlog/internal/pkg/log"
-	"github.com/gin-gonic/gin"
-	jwt "github.com/golang-jwt/jwt/v4"
 	"sync"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	jwt "github.com/golang-jwt/jwt/v4"
+
+	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 )
 
 // Config is the configuration for the token package

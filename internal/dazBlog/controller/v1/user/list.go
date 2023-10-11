@@ -7,13 +7,15 @@ package user
 
 import (
 	"context"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"google.golang.org/protobuf/types/known/timestamppb"
+
 	"github.com/Daz-3ux/dBlog/internal/pkg/core"
 	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
 	pb "github.com/Daz-3ux/dBlog/pkg/proto/dazBlog/v1"
-	"github.com/gin-gonic/gin"
-	"google.golang.org/protobuf/types/known/timestamppb"
-	"time"
 )
 
 // List return users list, only root user can call this function

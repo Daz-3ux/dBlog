@@ -9,6 +9,18 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"google.golang.org/grpc"
+
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/controller/v1/user"
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
 	"github.com/Daz-3ux/dBlog/internal/pkg/known"
@@ -17,16 +29,6 @@ import (
 	pb "github.com/Daz-3ux/dBlog/pkg/proto/dazBlog/v1"
 	"github.com/Daz-3ux/dBlog/pkg/token"
 	"github.com/Daz-3ux/dBlog/pkg/version/verflag"
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"google.golang.org/grpc"
-	"net"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
 )
 
 var cfgFile string

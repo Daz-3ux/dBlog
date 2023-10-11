@@ -7,10 +7,11 @@ package db
 
 import (
 	"fmt"
+	"time"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"time"
 )
 
 // MySQLOptions defines the options for connecting to MySQL

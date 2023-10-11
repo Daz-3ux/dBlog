@@ -6,9 +6,11 @@
 package model
 
 import (
-	"github.com/Daz-3ux/dBlog/pkg/auth"
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
+
+	"github.com/Daz-3ux/dBlog/pkg/auth"
 )
 
 type UserM struct {

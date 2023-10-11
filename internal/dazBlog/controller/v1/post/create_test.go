@@ -8,15 +8,17 @@ package post
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz"
-	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz/post"
-	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
-	"github.com/gin-gonic/gin"
-	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
+
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz"
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz/post"
+	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
 )
 
 type bodyLogWriter struct {

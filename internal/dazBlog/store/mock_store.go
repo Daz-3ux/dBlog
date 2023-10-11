@@ -13,9 +13,10 @@ import (
 	context "context"
 	reflect "reflect"
 
-	model "github.com/Daz-3ux/dBlog/internal/pkg/model"
 	gomock "github.com/golang/mock/gomock"
 	gorm "gorm.io/gorm"
+
+	model "github.com/Daz-3ux/dBlog/internal/pkg/model"
 )
 
 // MockIStore is a mock of IStore interface.

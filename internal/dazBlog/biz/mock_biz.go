@@ -12,9 +12,10 @@ package biz
 import (
 	reflect "reflect"
 
+	gomock "github.com/golang/mock/gomock"
+
 	post "github.com/Daz-3ux/dBlog/internal/dazBlog/biz/post"
 	user "github.com/Daz-3ux/dBlog/internal/dazBlog/biz/user"
-	gomock "github.com/golang/mock/gomock"
 )
 
 // MockIBiz is a mock of IBiz interface.

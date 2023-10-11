@@ -7,10 +7,12 @@ package verflag
 
 import (
 	"fmt"
-	"github.com/Daz-3ux/dBlog/pkg/version"
-	"github.com/spf13/pflag"
 	"os"
 	"strconv"
+
+	"github.com/spf13/pflag"
+
+	"github.com/Daz-3ux/dBlog/pkg/version"
 )
 
 // used to represent the version flag value

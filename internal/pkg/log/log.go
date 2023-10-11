@@ -117,7 +117,9 @@ func Sync() {
 }
 
 func (l *zapLogger) Sync() {
-	_ = l.z.Sync()
+	if err := l.z.Sync(); err != nil {
+		l.z.Error("log sync error", zap.Error(err))
+	}
 }
 
 // Debugw print debug level log

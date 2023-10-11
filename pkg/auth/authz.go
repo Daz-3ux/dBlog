@@ -41,7 +41,10 @@ func NewAuthz(db *gorm.DB) (*Authz, error) {
 		return nil, err
 	}
 
-	m, _ := model.NewModelFromString(aclModel)
+	m, err := model.NewModelFromString(aclModel)
+	if err != nil {
+		return nil, err
+	}
 
 	// Init the enforcer
 	enforcer, err := casbin.NewSyncedEnforcer(m, adapterByDB)

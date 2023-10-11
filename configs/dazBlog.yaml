@@ -35,4 +35,4 @@ log:
   disable-stacktrace: false
   level: debug
   format: console
-  output-paths: [stdout, /tmp/dBlog.log]
+  output-paths: [stdout]

@@ -8,6 +8,7 @@ package token
 import (
 	"errors"
 	"fmt"
+	"github.com/Daz-3ux/dBlog/internal/pkg/log"
 	"github.com/gin-gonic/gin"
 	jwt "github.com/golang-jwt/jwt/v4"
 	"sync"
@@ -64,7 +65,10 @@ func Parse(tokenString string, key string) (string, error) {
 	var identityKey string
 	// if parse success, get the identityKey from the token
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		identityKey = claims[config.identityKey].(string)
+		identityKey, ok = claims[config.identityKey].(string)
+		if !ok {
+			log.Errorw("Invalid identity key in token claims.")
+		}
 	}
 
 	return identityKey, nil

@@ -38,7 +38,7 @@ GO_LDFLAGS += \
 # ==============================================================================
 # define the Makefile "all" phony target, which is executed by default when running 'make'
 .PHONY: all
-all: add-copyright format build
+all: add-copyright format lint build
 
 # ==============================================================================
 # define other phony targets
@@ -87,6 +87,11 @@ ca: ## generate CA file
   	# 7.  generate server certificate signed by CA
 	@openssl x509 -req -CA $(OUTPUT_DIR)/cert/ca.crt -CAkey $(OUTPUT_DIR)/cert/ca.key \
   	-CAcreateserial -in $(OUTPUT_DIR)/cert/server.csr -out $(OUTPUT_DIR)/cert/server.crt
+
+.PHONY: lint
+lint: ## 执行静态代码检查.
+	@echo "===========> Run golangci to lint source codes"
+	@golangci-lint run -c ./.golangci.yaml ./...
 
 protoc: # compile protobuf file
 	@echo "=========> Generate protobuf files"

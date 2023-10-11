@@ -1,0 +1,58 @@
+# Copyright 2023 daz-3ux(杨鹏达) <daz-3ux@proton.me>. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file. The original repo for
+# this file is https://github.com/Daz-3ux/dBlog.
+
+# options for analysis running
+run:
+  issues-exit-code: 1
+  skip-dirs-use-default: true
+  modules-download-mode: readonly
+  timeout: 5m
+
+# settings of specific linters
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+  revive:
+    confidence: 0.8
+  gofmt:
+    simplify: true
+  goimports:
+    local-prefixes: github.com/Daz-3ux/dBlog
+  govet:
+    check-shadowing: true
+  funlen:
+    lines: 120
+    statements: 80
+  depguard:
+    rules:
+      main:
+        files:
+          - $all
+        deny:
+          - pkg: "github.com/sirupsen/logrus"
+            desc: "logging is standardised via yunikorn logger and zap"
+          - pkg: "github.com/stretchr/testify"
+            desc: "test assertions must use gotest.tools/v3/assert"
+
+# linters to use
+linters:
+  disable-all: true
+  fast: false
+  enable:
+    - unused
+    - staticcheck
+    - gofmt
+    - whitespace
+
+
+issues:
+  exclude-use-default: true
+
+  # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
+  max-issues-per-linter: 0
+
+  # Maximum count of issues with the same text. Set to 0 to disable. Default is 3.
+  max-same-issues: 0

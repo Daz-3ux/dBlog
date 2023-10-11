@@ -52,5 +52,4 @@ func main() {
 		d, _ := json.Marshal(u)
 		fmt.Println(string(d))
 	}
-
 }

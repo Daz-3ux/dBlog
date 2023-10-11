@@ -156,11 +156,13 @@ func startInsecureServer(g *gin.Engine) *http.Server {
 
 	// start the server in a goroutine
 	log.Infow("Start to listening the incoming requests on http address", "addr", viper.GetString("addr"))
-	go func() {
+
+	fn := func() {
 		if err := httpsrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalw(err.Error())
 		}
-	}()
+	}
+	go fn()
 
 	return httpsrv
 }
@@ -200,11 +202,13 @@ func startGRPCServer() *grpc.Server {
 
 	// start the server in a goroutine
 	log.Infow("Start to listening the incoming requests on gRPC address", "addr", viper.GetString("grpc.addr"))
-	go func() {
+
+	fn := func() {
 		if err := grpcsrv.Serve(lis); err != nil {
 			log.Fatalw("failed to serve", "err", err)
 		}
-	}()
+	}
+	go fn()
 
 	return grpcsrv
 }

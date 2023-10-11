@@ -5,6 +5,8 @@
 
 package biz
 
+//go:generate mockgen -destination mock_biz.go -package biz github.com/Daz-3ux/dBlog/internal/dazBlog/biz IBiz
+
 import (
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz/post"
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz/user"

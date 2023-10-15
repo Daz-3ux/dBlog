@@ -32,6 +32,7 @@ Options:
 endef
 export USAGE_OPTIONS
 
+export PATH := $(PATH):$(GOBIN)
 ## --------------------------------------
 ## Generate / Manifests
 ## --------------------------------------

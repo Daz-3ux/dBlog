@@ -4,7 +4,7 @@
 
 .PHONY: gen.add-copyright
 gen.add-copyright: ## dd license header
-	@addlicense -v -f $(ROOT_DIR)/scripts/boilerplate.txt $(ROOT_DIR) --skip-dirs=third_party,vendor,$(OUTPUT_DIR)
+	@addlicense -v -f $(ROOT_DIR)/scripts/boilerplate.txt $(ROOT_DIR) --skip-dirs=third_party,vendor,.idea,$(OUTPUT_DIR)
 
 .PHONY: gen.ca
 gen.ca: ## generate CA file
@@ -22,7 +22,7 @@ gen.ca: ## generate CA file
 	@openssl rsa -in $(OUTPUT_DIR)/cert/server.key -pubout -out $(OUTPUT_DIR)/cert/server.pem
 	# 6. generate CSR for server to request signing from CA
 	@openssl req -new -key $(OUTPUT_DIR)/cert/server.key -out $(OUTPUT_DIR)/cert/server.csr \
-  	-subj "/C=CN/ST=Guangdong/L=Shenzhen/O=serverdevops/OU=serverit/CN=127.0.0.1/emailAddress=daz-3ux@proton.me"
+  	-subj "/C=CN/ST=Shannxi/L=Xi'an/O=devops/OU=XiyouLUG/CN=127.0.0.1/emailAddress=daz-3ux@proton.me"
   	# 7.  generate server certificate signed by CA
 	@openssl x509 -req -CA $(OUTPUT_DIR)/cert/ca.crt -CAkey $(OUTPUT_DIR)/cert/ca.key \
   	-CAcreateserial -in $(OUTPUT_DIR)/cert/server.csr -out $(OUTPUT_DIR)/cert/server.crt

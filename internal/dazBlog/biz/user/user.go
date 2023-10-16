@@ -87,7 +87,7 @@ func (b *userBiz) Get(ctx context.Context, id string) (*v1.GetUserResponse, erro
 
 // List is the implementation of the `List` method of the UserBiz interface
 func (b *userBiz) List(ctx context.Context, offset, limit int) (*v1.ListUserResponse, error) {
-	count, list, err := b.ds.Users().List(ctx, offset, limit)
+	userCount, list, err := b.ds.Users().List(ctx, offset, limit)
 	if err != nil {
 		log.C(ctx).Errorw("failed to list users from storage", "err", err)
 		return nil, err
@@ -95,7 +95,7 @@ func (b *userBiz) List(ctx context.Context, offset, limit int) (*v1.ListUserResp
 
 	users := make([]*v1.UserInfo, 0, len(list))
 	for _, user := range list {
-		count, _, err := b.ds.Posts().List(ctx, user.Username, 0, 0)
+		postCount, _, err := b.ds.Posts().List(ctx, user.Username, 0, 0)
 		if err != nil {
 			log.C(ctx).Errorw("Failed to list posts", "err", err)
 			return nil, err
@@ -105,16 +105,18 @@ func (b *userBiz) List(ctx context.Context, offset, limit int) (*v1.ListUserResp
 			Username:  user.Username,
 			Nickname:  user.Nickname,
 			Email:     user.Email,
+			Gender:    user.Gender,
 			Phone:     user.Phone,
-			PostCount: count,
+			QQ:        user.QQ,
+			PostCount: postCount,
 			CreatedAt: user.CreatedAt.Format("2006-01-02 15:04:05"),
 			UpdatedAt: user.UpdatedAt.Format("2006-01-02 15:04:05"),
 		})
 	}
 
-	log.C(ctx).Debugw("Get users from storage", "count", count)
+	log.C(ctx).Debugw("Get users from storage", "count", userCount)
 
-	return &v1.ListUserResponse{TotalCount: count, Users: users}, nil
+	return &v1.ListUserResponse{TotalCount: userCount, Users: users}, nil
 }
 
 // Update is the implementation of the `Update` method of the UserBiz interface
@@ -124,14 +126,20 @@ func (b *userBiz) Update(ctx context.Context, username string, user *v1.UpdateUs
 		return err
 	}
 
-	if *user.Email != "" {
-		userM.Email = *user.Email
-	}
 	if *user.Nickname != "" {
 		userM.Nickname = *user.Nickname
 	}
+	if *user.Email != "" {
+		userM.Email = *user.Email
+	}
+	if *user.Gender != "" {
+		userM.Gender = *user.Gender
+	}
 	if *user.Phone != "" {
 		userM.Phone = *user.Phone
+	}
+	if *user.QQ != "" {
+		userM.QQ = *user.QQ
 	}
 
 	if err := b.ds.Users().Update(ctx, userM); err != nil {

@@ -42,6 +42,9 @@ docker run --network=host \
 dazblog-image:latest
 ```
 
+#### 数据库配置
+[初始化数据库](./docs/devel/zh-CN/conversions/DB.md)
+
 ## Documentation
 ### 实现功能
 [openAPI文档](api/openapi/openapi.yaml)

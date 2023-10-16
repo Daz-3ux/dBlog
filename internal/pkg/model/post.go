@@ -6,6 +6,7 @@
 package model
 
 import (
+	"sync/atomic"
 	"time"
 
 	"gorm.io/gorm"
@@ -30,6 +31,25 @@ func (p *PostM) TableName() string {
 
 func (p *PostM) BeforeCreate(tx *gorm.DB) error {
 	p.PostID = "post-" + id.GenShortID()
+
+	return nil
+}
+
+func (p *PostM) AfterCreate(tx *gorm.DB) error {
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	var user UserM
+	if err := tx.Where("username = ?", p.Username).First(&user).Error; err != nil {
+		return err
+	}
+
+	atomic.AddInt64(&user.PostCount, 1)
+
+	if err := tx.Save(&user).Error; err != nil {
+		return err
+	}
 
 	return nil
 }

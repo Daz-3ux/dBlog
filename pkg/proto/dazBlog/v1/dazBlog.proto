@@ -17,10 +17,12 @@ service DazBlog {rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);}
 message UserInfo {string username = 1;
   string nickname = 2;
   string email = 3;
-  string phone = 4;
-  int64 postcount = 5;
-  google.protobuf.Timestamp createdAt = 6;
-  google.protobuf.Timestamp updatedAt = 7;}
+  string gender = 4;
+  string phone = 5;
+  string qq = 6;
+  int64 postcount = 7;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;}
 
 // ListUserRequest specifies the request for `ListUser` endpoint
 message ListUsersRequest {int64 limit = 1;

@@ -5,9 +5,9 @@
 
 -- MariaDB dump 10.19-11.1.2-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: dazBlog
+-- Host: 127.0.0.1    Database: dazblog
 -- ------------------------------------------------------
--- Server version	11.1.2-MariaDB-1:11.1.2+maria~ubu2204
+-- Server version	10.11.5-MariaDB-1:10.11.5+maria~ubu2204
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -21,56 +21,60 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `dazBlog`
+-- Current Database: `dazblog`
 --
 
-/*!40000 DROP DATABASE IF EXISTS `dazBlog`*/;
+/*!40000 DROP DATABASE IF EXISTS `dazblog`*/;
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dazBlog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dazblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
 
-USE `dazBlog`;
+USE `dazblog`;
 
 --
--- Table structure for table `posts`
+-- Table structure for table `post`
 --
 
-DROP TABLE IF EXISTS `posts`;
+DROP TABLE IF EXISTS `post`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `posts` (
+CREATE TABLE `post` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `postID` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `content` text NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `postID` varchar(100) NOT NULL,
+  `title` varchar(150) NOT NULL,
+  `content` longtext NOT NULL,
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
   `updatedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `postID` (`postID`),
-  UNIQUE KEY `title` (`title`),
-  KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+  KEY `idx_username` (`username`),
+  CONSTRAINT `fk_post_username` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `users`
+-- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
+CREATE TABLE `user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
+  `postcount` int(11) NOT NULL DEFAULT 0,
+  `username` varchar(30) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `nickname` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `phone` varchar(16) NOT NULL,
+  `nickname` varchar(30) NOT NULL,
+  `email` varchar(320) NOT NULL,
+  `gender` enum('Male','Female','Other') DEFAULT NULL,
+  `phone` varchar(16) DEFAULT NULL,
+  `qq` varchar(16) DEFAULT NULL,
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
   `updatedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -82,4 +86,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-26 21:08:37
+-- Dump completed on 2023-10-16 21:27:31

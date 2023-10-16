@@ -20,7 +20,9 @@ type UserM struct {
 	Password  string    `gorm:"column:password"`       // password of the user
 	Nickname  string    `gorm:"column:nickname"`       // nickname of the user
 	Email     string    `gorm:"column:email"`          // email of the user
+	Gender    string    `gorm:"column:gender"`         // gender of the user
 	Phone     string    `gorm:"column:phone"`          // phone number of the user
+	QQ        string    `gorm:"column:qq"`             // qq number of the user
 	CreatedAt time.Time `gorm:"column:createdAt"`      // time when the user was created
 	UpdatedAt time.Time `gorm:"column:updatedAt"`      // time when the user was updated
 }

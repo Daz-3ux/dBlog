@@ -23,7 +23,7 @@ db:
   host: 127.0.0.1
   username: root
   password: passwd
-  database: dazBlog
+  database: dazblog
   max-idle-connections: 100
   max-open-connections: 100
   max-connection-life-time: 10s

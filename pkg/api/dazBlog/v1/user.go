@@ -8,25 +8,29 @@ package v1
 // CreateUserRequest specifies the request parameters for
 // `POST /v1/users`
 type CreateUserRequest struct {
-	Postcount int64  `json:"postcount" valid:"required,stringlength(1|255)"`
-	Username  string `json:"username" valid:"alphanum,required,stringlength(1|255)"`
+	Postcount int64  `json:"postcount" valid:"stringlength(1|255)"`
+	Username  string `json:"username" valid:"alphanum,required,stringlength(1|30)"`
 	Password  string `json:"password" valid:"required,stringlength(6|18)"`
-	Nickname  string `json:"nickname" valid:"required,stringlength(1|255)"`
+	Nickname  string `json:"nickname" valid:"required,stringlength(1|30)"`
 	Email     string `json:"email" valid:"required,email"`
+	Gender    string `json:"gender" valid:"required"`
 	Phone     string `json:"phone" valid:"required,numeric,stringlength(11|11)"`
+	QQ        string `json:"qq" valid:"numeric,stringlength(5|16)"`
 }
 
 // GetUserResponse specifies the response parameters for
 // `GET /v1/users/{username}`
 type GetUserResponse UserInfo
 
-// UserInfo is the user's all information
+// UserInfo is the user's all information that can be listed
 type UserInfo struct {
+	PostCount int64  `json:"postcount"`
 	Username  string `json:"username"`
 	Nickname  string `json:"nickname"`
 	Email     string `json:"email"`
+	Gender    string `json:"gender"`
 	Phone     string `json:"phone"`
-	PostCount int64  `json:"postcount"`
+	QQ        string `json:"qq"`
 	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
 }
@@ -48,9 +52,11 @@ type ListUserResponse struct {
 // UpdateUserRequest specifies the request parameters for
 // `PUT /v1/users/{username}`
 type UpdateUserRequest struct {
-	Nickname *string `json:"nickname" valid:"required,stringlength(1|255)"`
+	Nickname *string `json:"nickname" valid:"stringlength(1|255)"`
 	Email    *string `json:"email" valid:"email"`
+	Gender   *string `json:"gender" valid:"stringlength(1|10)"`
 	Phone    *string `json:"phone" valid:"numeric,stringlength(11|11)"`
+	QQ       *string `json:"qq" valid:"numeric,stringlength(5|16)"`
 }
 
 // ChangePasswordRequest specifies the request parameters for

@@ -2,6 +2,7 @@
 **/_output/
 **/.idea
 **/tmp
+/configs/dazBlog.yaml
 
 .air.toml
 

@@ -28,7 +28,7 @@ make tool.verify && make ca && make
 
 ./_output/platforms/linux/amd64/dBlog -c configs/dazBlog.yaml
 ```
-#### Dockerfile
+#### Dockerfile(推荐)
 ```shell
 docker build -t dazblog-image:latest .
 
@@ -40,6 +40,20 @@ docker run --network=host \
 -e DB_NAME=your_db_name \
 --restart always \
 dazblog-image:latest
+```
+
+#### Docker
+```shell
+docker pull realdaz/dazblog
+
+docker run --network=host \
+-e DB_HOST=your_db_host \
+-e DB_PORT=your_db_port \
+-e DB_USER=your_db_user \
+-e DB_PASSWORD=your_db_password \
+-e DB_NAME=your_db_name \
+--restart always \
+realdaz/dazblog
 ```
 
 #### 数据库配置

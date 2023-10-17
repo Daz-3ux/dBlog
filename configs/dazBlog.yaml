@@ -1,0 +1,38 @@
+# Copyright 2023 daz-3ux(杨鹏达) <daz-3ux@proton.me>. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file. The original repo for
+# this file is https://github.com/Daz-3ux/dBlog.
+
+# common configs
+runmode: debug    # Gin run mode, debug / release / test
+addr: :8081        # HTTP server listen port
+jwt-secret: szO8T9zWx+AyZB1le9MaEG7MCToMVcELHZYiakv1rRE
+
+# gRPC server config
+grpc:
+  addr: :9090
+
+# HTTPS server config
+tls:
+  addr: :8443
+  cert: ./_output/cert/server.crt
+  key: ./_output/cert/server.key
+
+# mysql configs
+db:
+  host: 127.0.0.1
+  username: root
+  password: passwd
+  database: dazblog
+  max-idle-connections: 100
+  max-open-connections: 100
+  max-connection-life-time: 10s
+  log-level: 2 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
+
+# log configs
+log:
+  disable-caller: false
+  disable-stacktrace: false
+  level: debug
+  format: console
+  output-paths: [stdout, /var/log/dazblog.log]

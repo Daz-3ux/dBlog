@@ -48,6 +48,7 @@ dazblog-image:latest
 ## Documentation
 ### 实现功能
 [openAPI文档](api/openapi/openapi.yaml)
+[Postman文档](https://documenter.getpostman.com/view/30435589/2s9YR83t3M)
 - 用户管理
   - 用户注册
   - 用户登录

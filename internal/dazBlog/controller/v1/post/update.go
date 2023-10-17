@@ -39,5 +39,5 @@ func (ctrl *PostController) Update(c *gin.Context) {
 		return
 	}
 
-	core.WriteResponse(c, nil, nil)
+	core.WriteResponse(c, nil, map[string]string{"update post_id": postID})
 }

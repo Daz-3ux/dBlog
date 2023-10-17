@@ -32,6 +32,7 @@ func (ctrl *PostController) Create(c *gin.Context) {
 	}
 
 	resp, err := ctrl.b.Posts().Create(c, c.GetString(known.XUsernameKey), &r)
+	log.C(c).Infow("user create post", "username", c.GetString(known.XUsernameKey), "title", r.Title)
 	if err != nil {
 		core.WriteResponse(c, err, nil)
 		return

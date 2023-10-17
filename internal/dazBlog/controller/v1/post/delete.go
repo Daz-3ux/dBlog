@@ -23,5 +23,5 @@ func (ctrl *PostController) Delete(c *gin.Context) {
 		return
 	}
 
-	core.WriteResponse(c, nil, nil)
+	core.WriteResponse(c, nil, map[string]string{"delete post_id": postID, "status": "ok"})
 }

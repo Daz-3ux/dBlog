@@ -6,71 +6,71 @@
 package user
 
 import (
-    "context"
-    "time"
+	"context"
+	"time"
 
-    "github.com/gin-gonic/gin"
-    "google.golang.org/protobuf/types/known/timestamppb"
+	"github.com/gin-gonic/gin"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
-    "github.com/Daz-3ux/dBlog/internal/pkg/core"
-    "github.com/Daz-3ux/dBlog/internal/pkg/log"
-    v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
-    pb "github.com/Daz-3ux/dBlog/pkg/proto/dazBlog/v1"
+	"github.com/Daz-3ux/dBlog/internal/pkg/core"
+	"github.com/Daz-3ux/dBlog/internal/pkg/log"
+	v1 "github.com/Daz-3ux/dBlog/pkg/api/dazBlog/v1"
+	pb "github.com/Daz-3ux/dBlog/pkg/proto/dazBlog/v1"
 )
 
 // List return users list, only root user can call this function
 func (ctrl *UserController) List(c *gin.Context) {
-    log.C(c).Infow("List user function called")
+	log.C(c).Infow("List user function called")
 
-    var r v1.ListUserRequest
-    if err := c.ShouldBindJSON(&r); err != nil {
-        core.WriteResponse(c, err, nil)
-        log.C(c).Errorw("List user bind called", "error", err)
+	var r v1.ListUserRequest
+	if err := c.ShouldBindJSON(&r); err != nil {
+		core.WriteResponse(c, err, nil)
+		log.C(c).Errorw("List user bind called", "error", err)
 
-        return
-    }
+		return
+	}
 
-    resp, err := ctrl.b.Users().List(c, r.Offset, r.Limit)
-    if err != nil {
-        core.WriteResponse(c, err, nil)
-        log.C(c).Errorw("List user write called", "error", err)
+	resp, err := ctrl.b.Users().List(c, r.Offset, r.Limit)
+	if err != nil {
+		core.WriteResponse(c, err, nil)
+		log.C(c).Errorw("List user write called", "error", err)
 
-        return
-    }
+		return
+	}
 
-    core.WriteResponse(c, nil, resp)
+	core.WriteResponse(c, nil, resp)
 }
 
 // ListUsers return users list for gRPC
 func (ctrl *UserController) ListUsers(ctx context.Context, r *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
-    log.C(ctx).Infow("ListUsers function called")
+	log.C(ctx).Infow("ListUsers function called")
 
-    resp, err := ctrl.b.Users().List(ctx, int(r.Offset), int(r.Limit))
-    if err != nil {
-        return nil, err
-    }
+	resp, err := ctrl.b.Users().List(ctx, int(r.Offset), int(r.Limit))
+	if err != nil {
+		return nil, err
+	}
 
-    users := make([]*pb.UserInfo, 0, len(resp.Users))
-    for _, u := range resp.Users {
-        createdAt, _ := time.Parse("2006-01-02 15:04:05", u.CreatedAt)
-        updatedAt, _ := time.Parse("2006-01-02 15:04:05", u.UpdatedAt)
-        users = append(users, &pb.UserInfo{
-            Username:  u.Username,
-            Nickname:  u.Nickname,
-            Email:     u.Email,
-            Gender:    u.Gender,
-            Phone:     u.Phone,
-            Qq:        u.QQ,
-            Postcount: u.PostCount,
-            CreatedAt: timestamppb.New(createdAt),
-            UpdatedAt: timestamppb.New(updatedAt),
-        })
-    }
+	users := make([]*pb.UserInfo, 0, len(resp.Users))
+	for _, u := range resp.Users {
+		createdAt, _ := time.Parse("2006-01-02 15:04:05", u.CreatedAt)
+		updatedAt, _ := time.Parse("2006-01-02 15:04:05", u.UpdatedAt)
+		users = append(users, &pb.UserInfo{
+			Username:  u.Username,
+			Nickname:  u.Nickname,
+			Email:     u.Email,
+			Gender:    u.Gender,
+			Phone:     u.Phone,
+			Qq:        u.QQ,
+			Postcount: u.PostCount,
+			CreatedAt: timestamppb.New(createdAt),
+			UpdatedAt: timestamppb.New(updatedAt),
+		})
+	}
 
-    ret := &pb.ListUsersResponse{
-        TotalCount: resp.TotalCount,
-        Users:      users,
-    }
+	ret := &pb.ListUsersResponse{
+		TotalCount: resp.TotalCount,
+		Users:      users,
+	}
 
-    return ret, nil
+	return ret, nil
 }

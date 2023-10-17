@@ -67,7 +67,7 @@ func installRouters(g *gin.Engine) error {
 			userv1.DELETE(":name", uc.Delete)
 		}
 
-		postv1 := v1.Group("/posts")
+		postv1 := v1.Group("/posts", mw.Authn())
 		{
 			// create post
 			postv1.POST("", pc.Create)

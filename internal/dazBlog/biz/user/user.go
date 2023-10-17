@@ -126,19 +126,19 @@ func (b *userBiz) Update(ctx context.Context, username string, user *v1.UpdateUs
 		return err
 	}
 
-	if *user.Nickname != "" {
+	if user.Nickname != nil && *user.Nickname != "" {
 		userM.Nickname = *user.Nickname
 	}
-	if *user.Email != "" {
+	if user.Email != nil && *user.Email != "" {
 		userM.Email = *user.Email
 	}
-	if *user.Gender != "" {
+	if user.Gender != nil && *user.Gender != "" {
 		userM.Gender = *user.Gender
 	}
-	if *user.Phone != "" {
+	if user.Phone != nil && *user.Phone != "" {
 		userM.Phone = *user.Phone
 	}
-	if *user.QQ != "" {
+	if user.QQ != nil && *user.QQ != "" {
 		userM.QQ = *user.QQ
 	}
 

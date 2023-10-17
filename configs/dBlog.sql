@@ -34,7 +34,7 @@ USE `dazblog`;
 -- Table structure for table `post`
 --
 
-DROP TABLE IF EXISTS `post`;
+DROP TABLE IF EXISTS posts;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `post` (
@@ -48,7 +48,7 @@ CREATE TABLE `post` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `postID` (`postID`),
   KEY `idx_username` (`username`),
-  CONSTRAINT `fk_post_username` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE CASCADE
+  CONSTRAINT `fk_post_username` FOREIGN KEY (`username`) REFERENCES users (`username`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -56,7 +56,7 @@ CREATE TABLE `post` (
 -- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS users;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (

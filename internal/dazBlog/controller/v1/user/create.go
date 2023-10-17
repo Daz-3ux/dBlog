@@ -24,6 +24,7 @@ func (ctrl *UserController) Create(c *gin.Context) {
 	var r v1.CreateUserRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		core.WriteResponse(c, errno.ErrBind, nil)
+		log.C(c).Errorw("Create user function called", "error", err.Error())
 		return
 	}
 
@@ -43,5 +44,5 @@ func (ctrl *UserController) Create(c *gin.Context) {
 		return
 	}
 
-	core.WriteResponse(c, nil, nil)
+	core.WriteResponse(c, nil, map[string]string{"create user": "ok"})
 }

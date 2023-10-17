@@ -21,7 +21,7 @@ func (ctrl *UserController) Update(c *gin.Context) {
 	var r v1.UpdateUserRequest
 	if err := c.ShouldBindJSON(&r); err != nil {
 		core.WriteResponse(c, errno.ErrBind, nil)
-
+		log.C(c).Errorw("binding request failed", "error", err.Error())
 		return
 	}
 
@@ -33,9 +33,9 @@ func (ctrl *UserController) Update(c *gin.Context) {
 
 	if err := ctrl.b.Users().Update(c, c.Param("name"), &r); err != nil {
 		core.WriteResponse(c, err, nil)
-
+		log.C(c).Errorw("updating user failed", "error", err.Error())
 		return
 	}
 
-	core.WriteResponse(c, nil, nil)
+	core.WriteResponse(c, nil, map[string]string{"update user info": "ok"})
 }

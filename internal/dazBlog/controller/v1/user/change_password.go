@@ -34,5 +34,5 @@ func (ctrl *UserController) ChangePassword(c *gin.Context) {
 		return
 	}
 
-	core.WriteResponse(c, nil, nil)
+	core.WriteResponse(c, nil, map[string]string{"change password": "ok"})
 }

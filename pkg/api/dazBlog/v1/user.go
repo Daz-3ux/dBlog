@@ -13,9 +13,10 @@ type CreateUserRequest struct {
 	Password  string `json:"password" valid:"required,stringlength(6|18)"`
 	Nickname  string `json:"nickname" valid:"required,stringlength(1|30)"`
 	Email     string `json:"email" valid:"required,email"`
-	Gender    string `json:"gender" valid:"required"`
-	Phone     string `json:"phone" valid:"required,numeric,stringlength(11|11)"`
-	QQ        string `json:"qq" valid:"numeric,stringlength(5|16)"`
+	// only male || female || other
+	Gender string `json:"gender" valid:"required"`
+	Phone  string `json:"phone" valid:"required,numeric,stringlength(11|11)"`
+	QQ     string `json:"qq" valid:"numeric,stringlength(5|16)"`
 }
 
 // GetUserResponse specifies the response parameters for

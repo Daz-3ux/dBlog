@@ -38,10 +38,18 @@ func (ctrl *UserController) Create(c *gin.Context) {
 		return
 	}
 
-	if _, err := ctrl.a.AddNamedPolicy("p", r.Username, "/v1/users/"+r.Username, defaultMethods); err != nil {
-		core.WriteResponse(c, err, nil)
+	if r.Username == "root" {
+		if _, err := ctrl.a.AddNamedPolicy("p", r.Username, "/v1/users*", defaultMethods); err != nil {
+			core.WriteResponse(c, err, nil)
 
-		return
+			return
+		}
+	} else {
+		if _, err := ctrl.a.AddNamedPolicy("p", r.Username, "/v1/users/"+r.Username, defaultMethods); err != nil {
+			core.WriteResponse(c, err, nil)
+
+			return
+		}
 	}
 
 	core.WriteResponse(c, nil, map[string]string{"create user": "ok"})

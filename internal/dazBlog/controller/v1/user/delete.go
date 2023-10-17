@@ -23,5 +23,11 @@ func (ctrl *UserController) Delete(c *gin.Context) {
 		return
 	}
 
+	if _, err := ctrl.a.RemoveNamedPolicy("p", username, "/v1/users/"+username, defaultMethods); err != nil {
+		core.WriteResponse(c, err, nil)
+
+		return
+	}
+
 	core.WriteResponse(c, nil, map[string]string{"delete user": "OK"})
 }

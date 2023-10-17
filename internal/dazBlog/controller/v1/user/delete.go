@@ -23,5 +23,5 @@ func (ctrl *UserController) Delete(c *gin.Context) {
 		return
 	}
 
-	core.WriteResponse(c, nil, nil)
+	core.WriteResponse(c, nil, map[string]string{"delete user": "OK"})
 }

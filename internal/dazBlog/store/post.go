@@ -9,6 +9,8 @@ import (
 	"context"
 	"errors"
 
+	"github.com/Daz-3ux/dBlog/internal/pkg/log"
+
 	"gorm.io/gorm"
 
 	"github.com/Daz-3ux/dBlog/internal/pkg/model"
@@ -69,6 +71,9 @@ func (p *posts) List(ctx context.Context, username string, offset, limit int) (c
 		// calculate the total number of results and store to count
 		Count(&count).
 		Error
+	if err != nil {
+		log.C(ctx).Errorw("failed to list posts", "error", err)
+	}
 
 	return
 }

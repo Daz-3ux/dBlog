@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-//go:generate mockgen -destination mock_store.go -package store github.com/Daz-3ux/dBlog/internal/dazBlog/store IStore,UserStore,PostStore
+//go:generate mockgen -destination mock_store.go -package store github.com/Daz-3ux/dBlog/internal/dazBlog/store IStore,UserStore,PostStore,AIStore
 
 /*
 	singleton factory pattern
@@ -31,6 +31,7 @@ type IStore interface {
 	DB() *gorm.DB
 	Users() UserStore
 	Posts() PostStore
+	AIs() AIStore
 }
 
 // datastore is the `factory` for creating store layer instance
@@ -70,4 +71,8 @@ func (ds *datastore) Users() UserStore {
 // Posts return an instance of PostStore
 func (ds *datastore) Posts() PostStore {
 	return newPosts(ds.db)
+}
+
+func (ds *datastore) AIs() AIStore {
+	return newAIs(ds.db)
 }

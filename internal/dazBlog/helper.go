@@ -36,9 +36,9 @@ func initConfig() {
 		// if failed, print 'Error: xxx' and do exit(1)
 		cobra.CheckErr(err)
 
-		// add `$HOME/<recommendedHomeDir>` into search path
+		// add `$HOME/<recommendedHomeDir>` into a search path
 		viper.AddConfigPath(filepath.Join(home, recommendedHomeDir))
-		// add current dir into search path
+		// add current dir into a search path
 		viper.AddConfigPath(".")
 		// set the config file's type
 		viper.SetConfigType("yaml")
@@ -49,7 +49,7 @@ func initConfig() {
 	// read matching env variable
 	viper.AutomaticEnv()
 	// set env variable's prefix
-	viper.SetEnvPrefix("MINIBLOG")
+	viper.SetEnvPrefix("dazBlog")
 
 	// Replace '.' and '-' with '_' in the key string before calling viper.Get(key).
 	replacer := strings.NewReplacer(".", "_", "-", "_")

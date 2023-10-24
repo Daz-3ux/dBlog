@@ -35,4 +35,4 @@ log:
   disable-stacktrace: false
   level: debug
   format: console
-  output-paths: [stdout, /var/log/dazblog.log]
+  output-paths: [stdout]

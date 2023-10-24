@@ -34,19 +34,19 @@ func (ctrl *UserController) Create(c *gin.Context) {
 	}
 
 	if err := ctrl.b.Users().Create(c, &r); err != nil {
-		core.WriteResponse(c, err, nil)
+		core.WriteResponse(c, err, map[string]string{"create user failed": "failed"})
 		return
 	}
 
 	if r.Username == "root" {
 		if _, err := ctrl.a.AddNamedPolicy("p", r.Username, "/v1/users*", defaultMethods); err != nil {
-			core.WriteResponse(c, err, nil)
+			core.WriteResponse(c, err, map[string]string{"create root user auth": "failed"})
 
 			return
 		}
 	} else {
 		if _, err := ctrl.a.AddNamedPolicy("p", r.Username, "/v1/users/"+r.Username, defaultMethods); err != nil {
-			core.WriteResponse(c, err, nil)
+			core.WriteResponse(c, err, map[string]string{"create user auth": "failed"})
 
 			return
 		}

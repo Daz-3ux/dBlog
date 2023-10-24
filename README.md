@@ -1,10 +1,11 @@
 # dazBlog
-dazBlog 是一个基于 Go 语言开发的博客系统，其目的是为了学习 Go 语言，同时也是为了学习如何开发一个完整的项目。  
+dazBlog 是一个基于 Go 语言开发的博客系统  
+使用了 `Golang` + `Gin` + `MySQL` + `Docker`
 
 ## Features
 - 使用了简洁架构,目录结构规范清晰
 - 使用众多常用 Go 包
-- 具备认证 (JWT) 以及授权 (Casbin) 功能
+- 具备认证 (Gin JWT) 以及授权 (Casbin) 功能
 - 独立封装 log, error 包
 - 使用 Makefile 高效管理项目
 - 静态代码检查
@@ -14,7 +15,7 @@ dazBlog 是一个基于 Go 语言开发的博客系统，其目的是为了学�
   - 优雅关停,中间件,跨域,异常恢复
 - 使用 MariaDB 存储数据
 - RESTful API 设计规范以及 OpenAPI 3.0/Swagger 2.0 API 文档
-- 使用 Docker 部署项目
+- 支持 Docker 部署
 - 完善的文档
 
 ## Installation
@@ -61,7 +62,7 @@ realdaz/dazblog
 
 ## Documentation
 ### 实现功能
-[openAPI文档](api/openapi/openapi.yaml)
+[openAPI文档](api/openapi/openapi.yaml)  
 [Postman文档](https://documenter.getpostman.com/view/30435589/2s9YR83t3M)
 - 用户管理
   - 用户注册
@@ -71,6 +72,7 @@ realdaz/dazblog
   - 更新用户信息
   - 修改用户密码
   - 注销用户
+    - 基于 MySQL 触发器会自动删除用户所有博客并清除权限
 - 博客管理
   - 创建博客
   - 获取博客列表
@@ -104,6 +106,8 @@ realdaz/dazblog
 
 ### HTTPS 的使用
 [使用HTTPS](./docs/devel/zh-CN/conversions/https.md)
+
+---
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

@@ -8,6 +8,7 @@ package biz
 //go:generate mockgen -destination mock_biz.go -package biz github.com/Daz-3ux/dBlog/internal/dazBlog/biz IBiz
 
 import (
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz/ai"
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz/post"
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/biz/user"
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/store"
@@ -17,6 +18,7 @@ import (
 type IBiz interface {
 	Users() user.UserBiz
 	Posts() post.PostBiz
+	AIs() ai.AIBiz
 }
 
 // ensure that biz implements the IBiz interface
@@ -40,4 +42,8 @@ func (b *biz) Users() user.UserBiz {
 
 func (b *biz) Posts() post.PostBiz {
 	return post.NewPostBiz(b.ds)
+}
+
+func (b *biz) AIs() ai.AIBiz {
+	return ai.NewAIBiz(b.ds)
 }

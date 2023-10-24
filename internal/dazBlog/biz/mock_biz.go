@@ -14,6 +14,7 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 
+	ai "github.com/Daz-3ux/dBlog/internal/dazBlog/biz/ai"
 	post "github.com/Daz-3ux/dBlog/internal/dazBlog/biz/post"
 	user "github.com/Daz-3ux/dBlog/internal/dazBlog/biz/user"
 )
@@ -39,6 +40,20 @@ func NewMockIBiz(ctrl *gomock.Controller) *MockIBiz {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockIBiz) EXPECT() *MockIBizMockRecorder {
 	return m.recorder
+}
+
+// AIs mocks base method.
+func (m *MockIBiz) AIs() ai.AIBiz {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AIs")
+	ret0, _ := ret[0].(ai.AIBiz)
+	return ret0
+}
+
+// AIs indicates an expected call of AIs.
+func (mr *MockIBizMockRecorder) AIs() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AIs", reflect.TypeOf((*MockIBiz)(nil).AIs))
 }
 
 // Posts mocks base method.

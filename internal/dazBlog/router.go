@@ -9,6 +9,8 @@ import (
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 
+	"github.com/Daz-3ux/dBlog/internal/dazBlog/controller/v1/ai"
+
 	"github.com/Daz-3ux/dBlog/internal/pkg/errno"
 
 	"github.com/Daz-3ux/dBlog/internal/dazBlog/controller/v1/post"
@@ -43,6 +45,7 @@ func installRouters(g *gin.Engine) error {
 
 	uc := user.NewUserController(store.S, authz)
 	pc := post.NewPostController(store.S)
+	aiRoute := ai.NewAIController(store.S)
 
 	g.POST("/login", uc.Login)
 	// create v1 route group
@@ -81,6 +84,15 @@ func installRouters(g *gin.Engine) error {
 			postv1.DELETE("", pc.DeleteCollection)
 			// list posts
 			postv1.GET("", pc.List)
+		}
+
+		AIv1 := v1.Group("/AI", mw.Authn())
+		{
+			AIv1.POST("", aiRoute.Create)
+			AIv1.GET(":postID", aiRoute.Get)
+			AIv1.PUT(":postID", aiRoute.Update)
+			AIv1.GET("", aiRoute.List)
+			AIv1.DELETE(":postID", aiRoute.Delete)
 		}
 	}
 

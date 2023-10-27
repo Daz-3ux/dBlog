@@ -37,8 +37,12 @@ FROM ubuntu:devel AS final
 
 WORKDIR /dBlog
 
-RUN  mkdir -p /var/log/dazblog && \
-     touch /var/log/dazblog/dazblog.log
+RUN  mkdir -p /var/log/dazblog &&\
+     mkdir -p /etc/ssl/certs/ &&\
+     touch /var/log/dazblog/dazblog.log && \
+     apt-get update  && \
+     apt-get install curl -y
+
 
 COPY --from=build /dBlog/_output/platforms/linux/amd64/dBlog /dBlog/_output/platforms/linux/amd64/dBlog
 COPY --from=build /dBlog/_output/cert/ /dBlog/_output/cert

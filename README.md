@@ -1,11 +1,12 @@
 # dazBlog
 dazBlog 是一个基于 Go 语言开发的博客系统  
-使用了 `Golang` + `Gin` + `MySQL` + `Docker`
+使用了 `Golang` + `Gin` + `MySQL` + `chatGPT` + `Docker`
 
 ## Features
 - 使用了简洁架构,目录结构规范清晰
 - 使用众多常用 Go 包
 - 具备认证 (Gin JWT) 以及授权 (Casbin) 功能
+- 使用 [langchaingo](https://github.com/tmc/langchaingo) 调用 OPENAI, 使用 GPT-3.5-turbo 模型总结文章内容
 - 独立封装 log, error 包
 - 使用 Makefile 高效管理项目
 - 静态代码检查
@@ -16,6 +17,7 @@ dazBlog 是一个基于 Go 语言开发的博客系统
 - 使用 MariaDB 存储数据
 - RESTful API 设计规范以及 OpenAPI 3.0/Swagger 2.0 API 文档
 - 支持 Docker 部署
+- 接入腾讯公益 404 页面
 - 完善的文档
 
 ## Installation
@@ -39,6 +41,8 @@ docker run --network=host \
 -e DB_USER=your_db_user \
 -e DB_PASSWORD=your_db_password \
 -e DB_NAME=your_db_name \
+-e OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxx \
+-e OPENAI_MODEL=GPT-3.5-Trubo \
 --restart always \
 dazblog-image:latest
 ```
@@ -53,6 +57,8 @@ docker run --network=host \
 -e DB_USER=your_db_user \
 -e DB_PASSWORD=your_db_password \
 -e DB_NAME=your_db_name \
+-e OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxx \
+-e OPENAI_MODEL=GPT-3.5-Trubo \
 --restart always \
 realdaz/dazblog
 ```
@@ -80,6 +86,13 @@ realdaz/dazblog
   - 更新博客
   - 删除博客
   - 批量删除博客
+- OPENAI 调用
+  - 创建 AI 内容分析
+    - 调用 OPENAI GPT-3.5-turbo 模型总结文章内容
+  - 获取 AI 内容
+  - 更新 AI 内容
+  - 列出 AI 内容
+  - 删除 AI 内容
 
 ### 业务架构模型
 - 模型层 -- 控制层 -- 业务层 -- 仓库层
@@ -106,6 +119,9 @@ realdaz/dazblog
 
 ### HTTPS 的使用
 [使用HTTPS](./docs/devel/zh-CN/conversions/https.md)
+
+### OPENAI 的调用
+[langchaingo](./docs/devel/zh-CN/conversions/GPT.md)
 
 ---
 

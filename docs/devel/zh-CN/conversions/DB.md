@@ -3,11 +3,16 @@
 - sqldump 数据相关详细信息查看:
 [sql](/internal/pkg/model/README.md)
 
-### 创建数据库
+## 创建数据库
 - 启动数据库实例
 ```shell
 docker run -p 3306:3306 --name dazblogDB -e MARIADB_ROOT_PASSWORD=passwd -d mariadb:lts
 ```
+
+### 使用 mysql 还原 dBlog.sql (推荐)
+- [dBlog.sql位置](../../../../configs/dBlog.sql)
+
+### 手动方式 (不推荐)
 - 初始化数据库
 ```sql
 CREATE DATABASE `dazblog`;
@@ -16,7 +21,7 @@ USE `dazblog`;
 
 - 初始化用户表
 ```sql
-CREATE TABLE `user` (
+CREATE TABLE `users` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `postcount` int(11) NOT NULL DEFAULT '0',
     `username` varchar(30) NOT NULL,
@@ -36,7 +41,7 @@ CREATE TABLE `user` (
 
 - 初始化博客表
 ```sql
-CREATE TABLE `post` (
+CREATE TABLE `posts` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `username` varchar(30) NOT NULL,
     `postID` varchar(100) NOT NULL,
@@ -47,6 +52,19 @@ CREATE TABLE `post` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `postID` (`postID`),
     KEY `idx_username` (`username`),
-    CONSTRAINT fk_post_username FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE CASCADE
+    CONSTRAINT fk_post_username FOREIGN KEY (`username`) REFERENCES `users`(`username`) ON DELETE CASCADE
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+```
+
+- 初始化 AI 内容生成表
+```sql
+CREATE TABLE `ai` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `username` varchar(30) NOT NULL,
+    `postID` varchar(100) NOT NULL,
+    `content` longtext NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `postID` (`postID`),
+    CONSTRAINT fk_post_id FOREIGN KEY (postID) REFERENCES posts(postID) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 ```

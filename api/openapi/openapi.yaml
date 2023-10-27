@@ -1,638 +1,260 @@
-# Copyright 2023 daz-3ux(杨鹏达) <daz-3ux@proton.me>. All rights reserved.
-# Use of this source code is governed by a MIT style
-# license that can be found in the LICENSE file. The original repo for
-# this file is https://github.com/Daz-3ux/dBlog.
-
-swagger: "2.0"
-servers:
-  - url: http://127.0.0.1:8080/v1
-    description: development server
+openapi: 3.0.3
 info:
-  version: "1.0.0"
-  title: dBlog api definition
-  description: The API for the dBlog project
-  contact:
-    name: daz-3ux(杨鹏达)
-    email: daz-3ux@proton.me
-    url: https://github.com/Daz-3ux
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
+  title: dazblog
+  description: dazBlog 是一个基于 Go 语言开发的博客系统，其目的是为了学习 Go 语言，同时也是为了学习如何开发一个完整的项目。
+  version: 1.0.0
+  contact: {}
+servers:
+- url: 127.0.0.1
+- url: https://127.0.0.1
 paths:
   /login:
     post:
       tags:
-        - users
-      description: user login
+      - Users
+      summary: login
+      description: 登陆
       operationId: login
+      responses:
+        '200':
+          description: ''
+  /healthz:
+    get:
+      tags:
+      - Users
+      summary: healthz
+      description: 服务器状态检查
+      operationId: healthz
+      responses:
+        '200':
+          description: ''
+  /v1/users:
+    get:
+      tags:
+      - Users
+      summary: listUser
+      description: 列出用户列表
+      operationId: listuser
       requestBody:
-        description: login to dBlog platform
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              type: object
+              properties:
+                limit:
+                  type: number
+                  example: 10
+                offset:
+                  type: number
+                  example: 0
+            examples:
+              listUser:
+                value:
+                  limit: 10
+                  offset: 0
       responses:
         '200':
-          description: successfully login
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-  /users:
+          description: ''
     post:
       tags:
-        - users
-      description: create user
-      operationId: createUser
+      - Users
+      summary: create
+      description: 创建用户
+      operationId: create
       requestBody:
-        description: create user
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: daz-3ux@proton.me
+                gender:
+                  type: string
+                  example: other
+                nickname:
+                  type: string
+                  example: daz
+                password:
+                  type: string
+                  example: passwd
+                phone:
+                  type: string
+                  example: '12345678901'
+                qq:
+                  type: string
+                  example: '123123'
+                username:
+                  type: string
+                  example: root
+            examples:
+              create:
+                value:
+                  email: daz-3ux@proton.me
+                  gender: other
+                  nickname: daz
+                  password: passwd
+                  phone: '12345678901'
+                  qq: '123123'
+                  username: root
       responses:
         '200':
-          description: successfully create user
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-    get:
-      tags:
-        - users
-      description: list users
-      operationId: listUsers
-      parameters:
-        - name: offset
-          in: query
-          schema:
-            type: integer
-            format: int64
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successfully list users
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListUserResponse'
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-  /users/{name}:
-    get:
-      tags:
-        - users
-      description: get user
-      operationId: getUser
-      parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successfully get user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetUserResponse'
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-    delete:
-      tags:
-        - users
-      description: delete user
-      operationId: deleteUser
-      parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successfully delete user
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
+          description: ''
+  /v1/users/root/change-password:
     put:
       tags:
-        - users
-      description: update user
-      operationId: updateUser
+      - Users
+      summary: changePasswd
+      description: 修改用户密码
+      operationId: changepasswd
       requestBody:
-        description: update user
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserRequest'
+              type: object
+              properties:
+                newPassword:
+                  type: string
+                  example: passwd
+                oldPassword:
+                  type: string
+                  example: newpasswd
+            examples:
+              changePasswd:
+                value:
+                  newPassword: passwd
+                  oldPassword: newpasswd
       responses:
         '200':
-          description: successfully update user
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-  /users/{name}/change-password:
-    put:
-      tags:
-        - users
-      description: update user password
-      operationId: changePassword
-      requestBody:
-        description: update user password
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChangePasswordRequest'
-      responses:
-        '200':
-          description: successfully update user password
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-  /posts:
+          description: ''
+  /v1/posts:
     post:
       tags:
-        - posts
-      description: create blog post
-      operationId: createPost
+      - Posts
+      summary: createPost
+      description: 创建博客
+      operationId: createpost
       requestBody:
-        description: create post
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreatePostRequest'
+              type: object
+              properties:
+                content:
+                  type: string
+                  example: ttttttttttttttttttttttttest
+                title:
+                  type: string
+                  example: test post
+            examples:
+              createPost:
+                value:
+                  content: ttttttttttttttttttttttttest
+                  title: test post
       responses:
         '200':
-          description: successfully create post
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-    get:
-      tags:
-        - posts
-      description: list posts
-      operationId: listPosts
-      parameters:
-        - name: offset
-          in: query
-          schema:
-            type: integer
-            format: int64
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successfully list posts
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListPostResponse'
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
+          description: ''
     delete:
       tags:
-        - posts
-      description: delete posts
-      operationId: deletePosts
-      parameters:
-        - name: postID
-          in: query
-          schema:
-            type: array
-            items:
-              type: string
-              example: post-22z9jl
+      - Posts
+      summary: deletePostCollection
+      description: 批量删除博客
+      operationId: deletepostcollection
+      requestBody:
+        content:
+          application/json:
+            examples:
+              deletePostCollection:
+                value: ''
       responses:
         '200':
-          description: successfully delete posts
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-  /posts/{postID}:
-    get:
-      tags:
-        - posts
-      description: get post
-      operationId: getPost
-      parameters:
-        - name: postID
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successfully get post
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetPostResponse'
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-    delete:
-      tags:
-        - posts
-      description: delete post
-      operationId: deletePost
-      parameters:
-        - name: postID
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successfully delete post
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
+          description: ''
+  /v1/posts/post-23jkra:
     put:
       tags:
-        - posts
-      description: update post
-      operationId: updatePost
+      - Posts
+      summary: updatePost
+      description: 升级博客
+      operationId: updatepost
+      responses:
+        '200':
+          description: ''
+  /v1/posts/post-23adlk:
+    delete:
+      tags:
+      - Posts
+      summary: deletePost
+      description: 删除博客
+      operationId: deletepost
+      responses:
+        '200':
+          description: ''
+  /v1/users/root:
+    get:
+      tags:
+      - HTTPS
+      summary: catest
+      description: catest
+      operationId: catest
+      responses:
+        '200':
+          description: ''
+  /v1/AI:
+    post:
+      tags:
+      - AI
+      summary: Create AI
+      description: Create AI
+      operationId: createAi
       requestBody:
-        description: update post
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdatePostRequest'
+              type: object
+              properties:
+                postID:
+                  type: string
+                  example: post-23hhac
+                username:
+                  type: string
+                  example: root
+            examples:
+              Create AI:
+                value:
+                  postID: post-23hhac
+                  username: root
       responses:
         '200':
-          description: successfully update post
-        '400':
-          description: request failed due to client-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-        '500':
-          description: request failed due to server-side problem
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrResponse'
-components:
-  schemas:
-    LoginRequest:
-      required:
-        - username
-        - password
-      type: object
-      properties:
-        username:
-          type: string
-          example: belm
-        password:
-          type: string
-          format: password
-          example: dBlog1234
-    LoginResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          example: xxx.yyy.zzz
-    CreateUserRequest:
-      required:
-        - username
-        - password
-        - nickname
-        - email
-        - phone
-      type: object
-      properties:
-        username:
-          type: string
-          example: belm
-        password:
-          type: string
-          format: password
-          example: dBlog1234
-        nickname:
-          type: string
-          example: belm
-        email:
-          type: string
-          format: email
-          example: nosbelm@qq.com
-        phone:
-          type: string
-          example: 18128845xxx
-    GetUserResponse:
-      type: object
-      properties:
-        username:
-          type: string
-          example: belm
-        password:
-          type: string
-          format: password
-          example: dBlog1234
-        nickname:
-          type: string
-          example: belm
-        email:
-          type: string
-          format: email
-          example: nosbelm@qq.com
-        phone:
-          type: string
-          example: 18128845xxx
-        createdAt:
-          type: string
-          format: date-time
-          example: 2022-11-14 18:00:32
-        updatedAt:
-          type: string
-          format: date-time
-          example: 2022-11-14 18:00:35
-    ChangePasswordRequest:
-      required:
-        - oldPassword
-        - newPassword
-      type: object
-      properties:
-        oldPassword:
-          type: string
-          format: password
-          example: dBlog1234
-        newPassword:
-          type: string
-          format: password
-          example: dBlog12345
-    UpdateUserRequest:
-      type: object
-      properties:
-        nickname:
-          type: string
-          example: belm
-        email:
-          type: string
-          format: email
-          example: nosbelm@qq.com
-        phone:
-          type: string
-          example: 18128845xxx
-    ListUserResponse:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-          example: 3
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserInfo'
-    UserInfo:
-      type: object
-      properties:
-        username:
-          type: string
-          example: belm
-        password:
-          type: string
-          format: password
-          example: dBlog1234
-        nickname:
-          type: string
-          example: belm
-        email:
-          type: string
-          format: email
-          example: nosbelm@qq.com
-        phone:
-          type: string
-          example: 18128845xxx
-        createdAt:
-          type: string
-          format: date-time
-          example: 2022-11-14 18:00:32
-        updatedAt:
-          type: string
-          format: date-time
-          example: 2022-11-14 18:00:35
-    CreatePostRequest:
-      required:
-        - title
-        - content
-      type: object
-      properties:
-        title:
-          type: string
-          example: 'introduction to a good go practical project: dBlog'
+          description: ''
+  /v1/AI/post-23hhac:
+    put:
+      tags:
+      - AI
+      summary: updateAI
+      description: updateAI
+      operationId: updateai
+      requestBody:
         content:
-          type: string
-          example: "Details see https://github.com/Daz-3ux/dBlog/blob/master/README.md"
-    CreatePostResponse:
-      type: object
-      properties:
-        postID:
-          type: string
-          example: post-22z9jl
-    PostInfo:
-      type: object
-      properties:
-        username:
-          type: string
-          example: belm
-        postID:
-          type: string
-          example: post-22z9jl
-        title:
-          type: string
-          example: 'introduction to a good go practical project: dBlog'
-        content:
-          type: string
-          example: "Details see https://github.com/Daz-3ux/dBlog/blob/master/README.md"
-        createdAt:
-          type: string
-          format: date-time
-          example: 2022-11-14 18:00:32
-        updatedAt:
-          type: string
-          format: date-time
-          example: 2022-11-14 18:00:35
-    GetPostResponse:
-      type: object
-      properties:
-        username:
-          type: string
-          example: belm
-        postID:
-          type: string
-          example: post-22z9jl
-        title:
-          type: string
-          example: 'introduction to a good go practical project: dBlog'
-        content:
-          type: string
-          example: "Details see https://github.com/Daz-3ux/dBlog/blob/master/README.md"
-        createdAt:
-          type: string
-          format: date-time
-          example: 2022-11-14 18:00:32
-        updatedAt:
-          type: string
-          format: date-time
-          example: 2022-11-14 18:00:35
-    UpdatePostRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          example: 'introduction to a good go practical project: dBlog'
-        content:
-          type: string
-          example: "Details see https://github.com/Daz-3ux/dBlog/blob/master/README.md"
-    ListPostResponse:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-          example: 3
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/PostInfo'
-    ErrResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int64
-          example: 10001/20002
-        message:
-          type: string
-          example: "Internal server error./Validation failed."
+          application/json:
+            examples:
+              updateAI:
+                value: "{\n    \"username\": \n}"
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+      - AI
+      summary: deleteAI
+      description: deleteAI
+      operationId: deleteai
+      responses:
+        '200':
+          description: ''
+tags:
+- name: Users
+- name: Posts
+- name: HTTPS
+- name: AI
+

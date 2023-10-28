@@ -1,6 +1,6 @@
 # dazBlog
 dazBlog 是一个基于 Go 语言开发的博客系统  
-使用了 `Golang` + `Gin` + `MySQL` + `chatGPT` + `Docker`
+使用了 `Golang` + `Gin` + `MySQL` + `chatGPT` + `Docker` + `Nginx`
 
 ## Features
 - 使用了简洁架构,目录结构规范清晰
@@ -21,6 +21,7 @@ dazBlog 是一个基于 Go 语言开发的博客系统
 - 完善的文档
 
 ## Installation
+
 #### 自行构建
 ```shell
 git clone git@github.com:Daz-3ux/dBlog.git
@@ -31,6 +32,7 @@ make tool.verify && make ca && make
 
 ./_output/platforms/linux/amd64/dBlog -c configs/dazBlog.yaml
 ```
+
 #### Dockerfile(推荐)
 ```shell
 docker build -t dazblog-image:latest .
@@ -42,7 +44,6 @@ docker run --network=host \
 -e DB_PASSWORD=your_db_password \
 -e DB_NAME=your_db_name \
 -e OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxx \
--e OPENAI_MODEL=GPT-3.5-Trubo \
 --restart always \
 dazblog-image:latest
 ```
@@ -58,12 +59,15 @@ docker run --network=host \
 -e DB_PASSWORD=your_db_password \
 -e DB_NAME=your_db_name \
 -e OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxx \
--e OPENAI_MODEL=GPT-3.5-Trubo \
 --restart always \
 realdaz/dazblog
 ```
 
-#### 数据库配置
+## 基于 Nginx 实现高可用
+[Nginx+Keepalived 保证 dBlog 高可用](./docs/devel/zh-CN/conversions/Nginx.md)
+
+
+## 数据库配置
 [初始化数据库](./docs/devel/zh-CN/conversions/DB.md)
 
 ## Documentation
@@ -86,7 +90,7 @@ realdaz/dazblog
   - 更新博客
   - 删除博客
   - 批量删除博客
-- OPENAI 调用
+- OpenAI 调用
   - 创建 AI 内容分析
     - 调用 OPENAI GPT-3.5-turbo 模型总结文章内容
   - 获取 AI 内容

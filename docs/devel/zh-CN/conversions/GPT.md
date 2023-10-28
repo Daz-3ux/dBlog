@@ -7,7 +7,6 @@
 - 示例:
 ```sql
 export OPENAI_API_KEY='sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-export OPENAI_MODEL='GPT-3.5-Turbo'
 ```
 
 ## 作用

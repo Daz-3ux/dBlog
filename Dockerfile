@@ -44,10 +44,16 @@ RUN  mkdir -p /var/log/dazblog &&\
      apt-get install curl -y
 
 
-COPY --from=build /dBlog/_output/platforms/linux/amd64/dBlog /dBlog/_output/platforms/linux/amd64/dBlog
-COPY --from=build /dBlog/_output/cert/ /dBlog/_output/cert
-COPY --from=build /dBlog/internal/resource/404.html /dBlog/internal/resource/404.html
-COPY --from=build /dBlog/configs/dazBlog.yaml /dBlog/configs/dazBlog.yaml
+COPY --from=build \
+    /dBlog/_output/platforms/linux/amd64/dBlog \
+    /dBlog/_output/platforms/linux/amd64/dBlog \
+    /dBlog/_output/cert/ \
+    /dBlog/_output/cert/ \
+    /dBlog/internal/resource/404.html \
+    /dBlog/internal/resource/ \
+    /dBlog/configs/dazBlog.yaml \
+    /dBlog/configs/
+
 
 HEALTHCHECK CMD curl --fail http://localhost:8081/healthz || exit 1
 
